@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "766472669518",
+    "firebase_url": "https://sell-the-passion.firebaseio.com",
+    "project_id": "sell-the-passion",
+    "storage_bucket": "sell-the-passion.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:766472669518:android:88d12d8830612cbfee761f",
+        "android_client_info": {
+          "package_name": "com.example.sell_the_passion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "766472669518-9h2g0itst2uvjcun3v4soas27pvmc9m5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-0UKIjnuIc17ebk_e5BOBeugdviv7XoI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "766472669518-9h2g0itst2uvjcun3v4soas27pvmc9m5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
