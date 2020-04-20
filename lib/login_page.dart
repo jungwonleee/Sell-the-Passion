@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'auth.dart';
 
 class LoginPage extends StatefulWidget {
+  LoginPage({this.auth});
+  final BaseAuth auth;
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<StatefulWidget> createState() => new _LoginPageState();
 }
 
 enum FormType { login, register }
@@ -28,16 +30,13 @@ class _LoginPageState extends State<LoginPage> {
     if (validateAndSave()) {
       try {
         if (_formType == FormType.login) {
-          AuthResult result = await FirebaseAuth.instance
-              .signInWithEmailAndPassword(email: _email, password: _password);
-          FirebaseUser user = result.user;
-          print('Sign in: ${user.uid}');
+          String userId =
+              await widget.auth.signInWithEmailAndPassword(_email, _password);
+          print('Sign in: $userId');
         } else {
-          AuthResult result = await FirebaseAuth.instance
-              .createUserWithEmailAndPassword(
-                  email: _email, password: _password);
-          FirebaseUser user = result.user;
-          print('Registered user: ${user.uid}');
+          String userId =
+              await widget.auth.signInWithEmailAndPassword(_email, _password);
+          print('Registered user: $userId');
         }
       } catch (e) {
         print('Error: $e');
@@ -62,8 +61,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      resizeToAvoidBottomPadding: false,
-      body: Column(
+      body: SingleChildScrollView(
+          child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
@@ -113,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                 )),
           )
         ],
-      ),
+      )),
     );
   }
 
