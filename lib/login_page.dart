@@ -36,8 +36,8 @@ class _LoginPageState extends State<LoginPage> {
               await widget.auth.signInWithEmailAndPassword(_email, _password);
           print('Sign in: $userId');
         } else {
-          String userId =
-              await widget.auth.signInWithEmailAndPassword(_email, _password);
+          String userId = await widget.auth
+              .createUserWithEmailAndPassword(_email, _password);
           print('Registered user: $userId');
         }
         widget.onSignedIn();
