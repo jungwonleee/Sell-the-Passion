@@ -1,38 +1,41 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class BaseAuth {
-  Future<String> signInWithEmailAndPassword(String email, String password);
-  Future<String> createUserWithEmailAndPassword(String email, String password);
+  Future<FirebaseUser> signInWithGoogle();
   Future<String> currentUser();
   Future<void> signOut();
 }
 
 class Auth implements BaseAuth {
-  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  GoogleSignIn _googleSignIn = new GoogleSignIn();
+  FirebaseUser _user;
 
-  Future<String> signInWithEmailAndPassword(
-      String email, String password) async {
-    AuthResult result = await firebaseAuth.signInWithEmailAndPassword(
-        email: email, password: password);
-    FirebaseUser user = result.user;
-    return user.uid;
-  }
+  Future<FirebaseUser> signInWithGoogle() async {
+    GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+    GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount.authentication;
 
-  Future<String> createUserWithEmailAndPassword(
-      String email, String password) async {
-    AuthResult result = await firebaseAuth.createUserWithEmailAndPassword(
-        email: email, password: password);
-    FirebaseUser user = result.user;
-    return user.uid;
+    AuthCredential credential = GoogleAuthProvider.getCredential(
+        idToken: googleSignInAuthentication.idToken,
+        accessToken: googleSignInAuthentication.accessToken);
+
+    AuthResult result = (await _auth.signInWithCredential(credential));
+
+    _user = result.user;
+    return _user;
   }
 
   Future<String> currentUser() async {
-    FirebaseUser user = await firebaseAuth.currentUser();
+    FirebaseUser user = await _auth.currentUser();
     return user.uid;
   }
 
   Future<void> signOut() async {
-    return await firebaseAuth.signOut();
+    await _auth.signOut().then((onValue) {
+      _googleSignIn.signOut();
+    });
   }
 }
