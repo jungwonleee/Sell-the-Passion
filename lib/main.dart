@@ -1,14 +1,30 @@
 import 'package:flutter/material.dart';
-import 'auth.dart';
-import 'root_page.dart';
+import 'package:provider/provider.dart';
+import 'firebase_provider.dart';
+import 'auth_page.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<FirebaseProvider>(
+            create: (_) => FirebaseProvider())
+      ],
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: new RootPage(auth: new Auth()));
+        title: "Flutter Firebase",
+        home: HomePage(),
+      ),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AuthPage();
   }
 }

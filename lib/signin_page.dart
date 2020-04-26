@@ -1,27 +1,39 @@
 import 'package:flutter/material.dart';
-import 'auth.dart';
+import 'firebase_provider.dart';
+import 'package:provider/provider.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({this.auth, this.onSignedIn});
-  final BaseAuth auth;
-  final VoidCallback onSignedIn;
+SignInPageState pageState;
 
+class SignInPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => new _LoginPageState();
+  SignInPageState createState() {
+    pageState = SignInPageState();
+    return pageState;
+  }
 }
 
-class _LoginPageState extends State<LoginPage> {
-  void login() async {
-    try {
-      await widget.auth.signInWithGoogle();
-      widget.onSignedIn();
-    } catch (e) {
-      print(e);
-    }
+class SignInPageState extends State<SignInPage> {
+  FirebaseProvider fp;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    fp = Provider.of<FirebaseProvider>(context);
+    logger.d(fp.getUser());
+
+    void _signInWithGoogle() async {
+      await fp.signInWithGoogleAccount();
+    }
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,11 +82,10 @@ class _LoginPageState extends State<LoginPage> {
             height: 40.0,
             child: Material(
               borderRadius: BorderRadius.circular(7.0),
-              //shadowColor: Colors.grey,
               color: Colors.white,
               elevation: 5.0,
               child: GestureDetector(
-                onTap: login,
+                onTap: _signInWithGoogle,
                 child: Center(
                   child: Text(
                     '구글 계정으로 로그인하기',
