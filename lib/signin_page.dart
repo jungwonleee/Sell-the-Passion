@@ -15,6 +15,18 @@ class SignInPage extends StatefulWidget {
 class SignInPageState extends State<SignInPage> {
   FirebaseProvider fp;
 
+  TextStyle title = const TextStyle(
+    fontFamily: 'Apple Semibold',
+    fontSize: 80.0,
+    fontWeight: FontWeight.bold
+  );
+
+  TextStyle dot = const TextStyle(
+    fontSize: 80.0,
+    color: Colors.green,
+    fontWeight: FontWeight.bold
+  );
+
   @override
   void initState() {
     super.initState();
@@ -30,74 +42,71 @@ class SignInPageState extends State<SignInPage> {
     fp = Provider.of<FirebaseProvider>(context);
     logger.d(fp.getUser());
 
-    void _signInWithGoogle() async {
-      await fp.signInWithGoogleAccount();
-    }
-
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.fromLTRB(30.0, 125.0, 0.0, 0.0),
-                  child: Text(
-                    'Sell the',
-                    style: TextStyle(
-                        fontFamily: 'Apple Semibold',
-                        fontStyle: FontStyle.normal,
-                        fontSize: 80.0,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(30.0, 190.0, 0.0, 0.0),
-                  child: Text(
-                    'Passion',
-                    style: TextStyle(
-                        fontFamily: 'Apple Semibold',
-                        fontStyle: FontStyle.normal,
-                        fontSize: 80.0,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(290.0, 203.0, 0.0, 0.0),
-                  child: Text(
-                    '.',
-                    style: TextStyle(
-                        fontSize: 80.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green[400]),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 75.0),
-          Container(
-            padding: EdgeInsets.only(left: 60.0, right: 60.0),
-            height: 40.0,
-            child: Material(
-              borderRadius: BorderRadius.circular(7.0),
-              color: Colors.white,
-              elevation: 5.0,
-              child: GestureDetector(
-                onTap: _signInWithGoogle,
-                child: Center(
-                  child: Text(
-                    '구글 계정으로 로그인하기',
-                    style: TextStyle(
-                        color: Colors.black, fontFamily: 'Apple Semibold'),
-                  ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            _title(),
+            SizedBox(height: 20),
+            _signInButton()
+          ],
+        )
+      )
+    );
+  }
+
+  Widget _title() {
+    return Stack(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.only(top: 0.0),
+          child: Text('Sell the', style: title),
+        ),
+        Container(
+          padding: EdgeInsets.only(top: 65.0),
+          child: Text('Passion', style: title),
+        ),
+        Container(
+          padding: EdgeInsets.fromLTRB(260.0, 76.0, 0.0, 0.0),
+          child: Text('.', style: dot),
+        )
+      ],
+    );
+  }
+
+  Widget _signInButton() {
+    return RaisedButton(
+      color: Colors.white,
+      onPressed: _signInWithGoogle,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+      highlightElevation: 0.0,
+      elevation: 7.0,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 7, 0, 7),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image(image: AssetImage("assets/google_logo.png"), height: 20.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(
+                '구글 계정으로 로그인하기',
+                style: TextStyle(
+                  fontFamily: 'Apple Semibold',
+                  fontSize: 15,
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
+  }
+
+  void _signInWithGoogle() async {
+    await fp.signInWithGoogleAccount();
   }
 }
