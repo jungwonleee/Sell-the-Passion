@@ -18,12 +18,13 @@ class SignInPageState extends State<SignInPage> {
   TextStyle title = const TextStyle(
     fontFamily: 'Apple Semibold',
     fontSize: 80.0,
-    fontWeight: FontWeight.bold
+    fontWeight: FontWeight.bold,
+    color: Color(0xFF776D61),
   );
 
   TextStyle dot = const TextStyle(
     fontSize: 80.0,
-    color: Colors.green,
+    color: Color(0xFF66A091),
     fontWeight: FontWeight.bold
   );
 
