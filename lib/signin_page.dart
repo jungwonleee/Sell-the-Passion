@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'firebase_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -19,12 +20,12 @@ class SignInPageState extends State<SignInPage> {
     fontFamily: 'Apple Semibold',
     fontSize: 80.0,
     fontWeight: FontWeight.bold,
-    color: Color(0xFF776D61),
+    color: Color(0xFF80BCA3),
   );
 
   TextStyle dot = const TextStyle(
     fontSize: 80.0,
-    color: Color(0xFF66A091),
+    color: Color(0xFF655643),
     fontWeight: FontWeight.bold
   );
 

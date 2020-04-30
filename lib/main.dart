@@ -14,8 +14,15 @@ class MyApp extends StatelessWidget {
             create: (_) => FirebaseProvider())
       ],
       child: MaterialApp(
+        title: "Sell_The_Passion",
+        theme: ThemeData(
+          brightness: Brightness.light,
+          primaryColor: Color(0xFF80BCA3),
+          accentColor: Color(0xFF655643),
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+        ),
         debugShowCheckedModeBanner: false,
-        title: "Flutter Firebase",
         home: HomePage(),
       ),
     );
