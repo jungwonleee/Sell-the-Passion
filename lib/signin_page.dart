@@ -15,19 +15,6 @@ class SignInPage extends StatefulWidget {
 class SignInPageState extends State<SignInPage> {
   FirebaseProvider fp;
 
-  TextStyle title = const TextStyle(
-    fontFamily: 'Apple Semibold',
-    fontSize: 80.0,
-    fontWeight: FontWeight.bold,
-    color: Color(0xFF776D61),
-  );
-
-  TextStyle dot = const TextStyle(
-    fontSize: 80.0,
-    color: Color(0xFF66A091),
-    fontWeight: FontWeight.bold
-  );
-
   @override
   void initState() {
     super.initState();
@@ -43,13 +30,26 @@ class SignInPageState extends State<SignInPage> {
     fp = Provider.of<FirebaseProvider>(context);
     logger.d(fp.getUser());
 
+    TextStyle title = TextStyle(
+      fontFamily: 'Apple Semibold',
+      fontSize: 80.0,
+      fontWeight: FontWeight.bold,
+      color: Theme.of(context).accentColor,
+    );
+
+    TextStyle dot = TextStyle(
+      fontSize: 80.0,
+      color: Theme.of(context).primaryColor,
+      fontWeight: FontWeight.bold
+    );
+
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            _title(),
+            _title(title, dot),
             SizedBox(height: 20),
             _signInButton()
           ],
@@ -58,7 +58,7 @@ class SignInPageState extends State<SignInPage> {
     );
   }
 
-  Widget _title() {
+  Widget _title(title, dot) {
     return Stack(
       children: <Widget>[
         Container(
