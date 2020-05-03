@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sell_the_passion/goal_management_page.dart';
 import 'package:sell_the_passion/my_page.dart';
-import 'package:sell_the_passion/take_picture_screen.dart';
+import 'package:sell_the_passion/photo_uploader.dart';
+
 import 'firebase_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:camera/camera.dart';
 
 SignedInPageState pageState;
 
@@ -26,19 +27,6 @@ class SignedInPageState extends State<SignedInPage> {
     if (index == 2) return;
     setState(() {
       _selectedIndex = index;
-    });
-  }
-
-  void _uploadPhoto() async {
-  final cameras = await availableCameras();
-  final firstCamera = cameras.first;
-    final result = await Navigator.push(
-      context, 
-      MaterialPageRoute(builder: (context) => TakePictureScreen(camera: firstCamera))
-    );
-    if (result != "TOOK") return;
-    setState(() {
-      _selectedIndex = 0;
     });
   }
 
@@ -72,8 +60,8 @@ class SignedInPageState extends State<SignedInPage> {
         height: 70.0,
         width: 70.0,
         child: FloatingActionButton(
-          onPressed: _uploadPhoto,
-          child: Icon(Icons.camera, size: 40),
+          onPressed: () async => PhotoUploader.uploadImageToStorage(ImageSource.camera, fp),
+          child: Icon(Icons.camera, size: 60),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

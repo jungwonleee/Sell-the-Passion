@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'firebase_provider.dart';
 import 'package:provider/provider.dart';
+
+import 'firebase_provider.dart';
 
 MyPageState pageState;
 
