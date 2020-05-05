@@ -1,8 +1,3 @@
-import 'package:provider/provider.dart';
-
-import 'firebase_provider.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 GoalManagementPageState pageState;
@@ -16,59 +11,214 @@ class GoalManagementPage extends StatefulWidget {
   }
 }
 
+const Color mint = Color(0xFF66A091);
+const Color brown = Color(0xFF776D61);
+
 class GoalManagementPageState extends State<GoalManagementPage> {
-  List<String> urls = [""];
+  TextStyle apple = TextStyle(fontSize: 15.0, fontFamily: 'Apple Semibold');
 
   @override
   Widget build(BuildContext context) {
-    FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
 
-    FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
-    DatabaseReference dbRef = _firebaseDatabase.reference().child("${fp.getUser().uid}").child("posts");
+    return Scaffold(
+      backgroundColor: Colors.grey[200],
+      body: SafeArea(
+        top: true,
+        child: Column(
+          children: <Widget>[
+            goalInfo(),
+            SizedBox(height: 10),
+            Expanded(
+              child: Container(
+                decoration:  BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  color: Colors.white
+                ),
+                padding: EdgeInsets.fromLTRB(10.0, 10, 10.0, 5.0),
+                child: ListView(
+                  primary: false,
+                  children: <Widget>[
+                    weekText(1, '4월 6일 ~ 4월 12일'),
+                    SizedBox(height: 8),
+                    weekImage(),
+                    SizedBox(height: 10),
+                    weekText(2, '4월 13일 ~ 4월 19일'),
+                    SizedBox(height: 8),
+                    weekImage(),
+                    SizedBox(height: 10),
+                    weekText(3, '4월 20일 ~ 4월 26일'),
+                    SizedBox(height: 8),
+                    weekImage(),
+                    SizedBox(height: 10),
+                    weekText(4, '4월 27일 ~ 5월 3일'),
+                    SizedBox(height: 8),
+                    weekImage(),
+                    SizedBox(height: 10),
+                  ],
+                ),
+              )
+            ),
+          ],
+        )
+      ),
+    );
+  }
 
-    void getPhotosFromDB() {
-      dbRef.once().then((DataSnapshot snapshot){
-        Map<dynamic, dynamic> values = snapshot.value;
-        urls.clear();
-        values.forEach((key, value) {
-          setState(() {
-            urls.add(value);
-          });
-        });
-      });
-    }
-
-    getPhotosFromDB();
-    return Center(
+  Widget goalInfo() {
+    return Container(
+      decoration:  BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        color: Colors.white
+      ),
+      padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Image.network(
-              urls.first,
-              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                if (loadingProgress == null)
-                  return child;
-                return Center(
-                  child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
-                        : null,
-                  ),
-                );
-              },
-            ),
+          Row(
+            children: <Widget>[
+              Text('매일 약 챙겨 먹기', style: TextStyle(
+                fontFamily: 'Apple Semibold',
+                fontSize: 28
+              ),),
+              Container(
+                margin: const EdgeInsets.fromLTRB(12.0, 4.0, 0.0, 0.0),
+                padding: const EdgeInsets.fromLTRB(7.0, 0.0, 7.0, 1.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: brown, width: 1.5),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5.0)
+                  )
+                ),
+                child: Text('건강', style: TextStyle(
+                    color: brown, fontSize: 15.0, fontFamily: 'Apple Semibold')
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.fromLTRB(12.0, 4.0, 0.0, 0.0),
+                padding: const EdgeInsets.fromLTRB(7.0, 0.0, 7.0, 1.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: brown, width: 1.5),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5.0)
+                  )
+                ),
+                child: Text('4주', style: TextStyle(
+                    color: brown, fontSize: 15.0, fontFamily: 'Apple Semibold')
+                ),
+              )
+            ],
           ),
-          FlatButton(
-            child: Text("Refresh"),
-            onPressed: getPhotosFromDB,
+          SizedBox(height: 5),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                padding: const EdgeInsets.fromLTRB(7.0, 0.0, 7.0, 0.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: mint, width: 2.5),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0)
+                  )
+                ),
+                child: Text('Day 5', style: TextStyle(
+                    color: mint, fontSize: 40.0, fontFamily: 'Apple Semibold')
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 0.0),
+                child: Row(
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        SizedBox(height: 2.0),
+                        Text('확보한 금액', style: apple),
+                        SizedBox(height: 13.0),
+                        Text('후원받은 금액', style: apple),
+                      ],
+                    ),
+                    SizedBox(width: 10.0),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Text('3,000원', style: TextStyle(
+                          fontFamily: 'Apple Semibold', fontSize: 25.0, color: mint
+                        ),),
+                        Text('16,800원', style: TextStyle(
+                          fontFamily: 'Apple Semibold', fontSize: 25.0
+                        ),),
+                      ],
+                    )
+                  ],
+                ),
+              )
+            ],
           ),
+          Container(
+            margin: EdgeInsets.only(top: 10.0),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Text('목표기간', style: apple),
+                    SizedBox(width: 10.0),
+                    Text('2020년 4월 6일 ~ 2020년 5월 3일', style: apple)
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Text('인증횟수', style: apple),
+                    SizedBox(width: 10.0),
+                    Text('매일', style: apple)
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Text('인증방법', style: apple),
+                    SizedBox(width: 10.0),
+                    Text('먹는 약을 휴대폰 시간과 함께 찍는다', style: apple)
+                  ],
+                )
+              ]
+            ),
+          )
         ],
+      ),
+    );
+  }
+
+  Widget weekText(int num, String date) {
+    const TextStyle title = TextStyle(color: mint, fontFamily: 'Apple Semibold', fontSize: 28.0);
+    const TextStyle body = TextStyle(color: Colors.black, fontFamily: 'Apple Semibold', fontSize: 15.0);
+
+    return RichText(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(text: '$num주차', style: title),
+          TextSpan(text: '   $date', style: body)
+        ]
+      )
+    );
+  }
+
+  Widget weekImage() {
+    List<String> days = [
+      '월', '화', '수', '목', '금', '토', '일'
+    ];
+    return SizedBox(
+      height: 120.0,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: days.length,
+        itemExtent: 128.0,
+        itemBuilder: (context, index) {
+          var day = days[index];
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 3.0),
+            color: Color(0xFFB8C6D4),
+            child: Center(child: Text(day, style: TextStyle(fontFamily: 'Apple Semibold', fontSize: 30, color: Colors.white))),
+          );
+        }
       ),
     );
   }
