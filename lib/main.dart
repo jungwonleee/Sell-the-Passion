@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'firebase_provider.dart';
+import 'goal_provider.dart';
 import 'auth_page.dart';
 
 void main() => runApp(MyApp());
@@ -11,7 +12,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<FirebaseProvider>(
-            create: (_) => FirebaseProvider())
+            create: (_) => FirebaseProvider()),
+        ChangeNotifierProvider<Goal>(
+          create: (_) => Goal()),
       ],
       child: MaterialApp(
         title: "Sell_The_Passion",
@@ -21,6 +24,7 @@ class MyApp extends StatelessWidget {
           accentColor: Color(0xFF776D61),
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
+          fontFamily: 'Apple Semibold',
         ),
         debugShowCheckedModeBanner: false,
         home: HomePage(),
