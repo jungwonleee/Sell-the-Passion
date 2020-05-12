@@ -14,6 +14,7 @@ class _AddGoalState extends State<AddGoal> {
   List<bool> authDay = [false, false, false, false, false, false, false];
   TextEditingController goalTitleController = TextEditingController();
   TextEditingController authMethodController = TextEditingController();
+  bool valid;
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +29,31 @@ class _AddGoalState extends State<AddGoal> {
           FlatButton(
             child: Text('완료', style: TextStyle(fontSize: 18, color: Colors.white)),
             onPressed: () {
-              goal.setGoal(
-                goalTitleController.text, authMethodController.text, value[0], value[1],
-                null, null, authDay, null
-              );
-              Navigator.pop(context);
+              valid=isValid();
+              print(valid);
+              if (valid) {
+                goal.setGoal(
+                  goalTitleController.text, authMethodController.text, value[0], value[1],
+                  null, null, authDay, null
+                );
+                Navigator.pop(context);
+              }
+              else {
+                showDialog(context: context, builder: (context) {
+                  return AlertDialog(
+                    title: Text('오류'),
+                    content: Text('모든 항목을 채워주세요.'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('확인', style: TextStyle(color: mint),),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  );
+                });
+              }
             },
           ),
         ],
@@ -169,5 +190,21 @@ class _AddGoalState extends State<AddGoal> {
       showCheckmark: false,
       selectedColor: mint,
     );
+  }
+
+  bool isValid() {
+    bool authDayValid = false;
+    print(goalTitleController.text == '');
+    print(authMethodController.text == '');
+    print(value);
+    print(authDay);
+    if (goalTitleController.text == '') return false;
+    if (authMethodController.text == '') return false;
+    if (value[0] == null || value[1] == null) return false;
+    for (int i=0; i<7; i++) {
+      if (authDay[i] == true) authDayValid = true;
+    }
+    if (authDayValid == false) return false;
+    return true;
   }
 }
