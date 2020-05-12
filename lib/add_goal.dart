@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sell_the_passion/goal_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'firebase_provider.dart';
 
 class AddGoal extends StatefulWidget {
   @override
@@ -10,15 +12,34 @@ class AddGoal extends StatefulWidget {
 const Color mint = Color(0xFF66A091);
 
 class _AddGoalState extends State<AddGoal> {
-  List<int> value = [null, null]; // value[0]은 카테고리 값, value[1]은 period값
+  List<int> value = new List(2); // value[0]은 카테고리 값, value[1]은 period값
   List<bool> authDay = [false, false, false, false, false, false, false];
   TextEditingController goalTitleController = TextEditingController();
   TextEditingController authMethodController = TextEditingController();
-  bool valid;
+  bool valid, isNew;
+
+  @override
+  void initState() {
+    Goal goal = Provider.of<Goal>(context, listen: false);
+    super.initState();
+    setState(() {
+      if (goal.title != null) {
+        goalTitleController.text = goal.title;
+        authMethodController.text = goal.authMethod;
+        value[0] = goal.category;
+        value[1] = goal.period;
+        authDay = goal.authDay;
+        isNew = false;
+      }
+      else isNew = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     Goal goal = Provider.of<Goal>(context);
+    FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
+    DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('${fp.getUser().uid}').child("goal");
 
     return Scaffold(
       backgroundColor: Colors.grey[200],
@@ -30,12 +51,29 @@ class _AddGoalState extends State<AddGoal> {
             child: Text('완료', style: TextStyle(fontSize: 18, color: Colors.white)),
             onPressed: () {
               valid=isValid();
-              print(valid);
               if (valid) {
                 goal.setGoal(
                   goalTitleController.text, authMethodController.text, value[0], value[1],
                   null, null, authDay, null
                 );
+                if (isNew) {
+                  dbRef.set({
+                    'title': goal.title,
+                    'auth_method': goal.authMethod,
+                    'category': goal.category,
+                    'period': goal.period,
+                    'auth_day': goal.authDay,
+                  });
+                }
+                else {
+                  dbRef.update({
+                    'title': goal.title,
+                    'auth_method': goal.authMethod,
+                    'category': goal.category,
+                    'period': goal.period,
+                    'auth_day': goal.authDay,
+                  });
+                }
                 Navigator.pop(context);
               }
               else {
@@ -194,10 +232,6 @@ class _AddGoalState extends State<AddGoal> {
 
   bool isValid() {
     bool authDayValid = false;
-    print(goalTitleController.text == '');
-    print(authMethodController.text == '');
-    print(value);
-    print(authDay);
     if (goalTitleController.text == '') return false;
     if (authMethodController.text == '') return false;
     if (value[0] == null || value[1] == null) return false;
