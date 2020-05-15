@@ -5,6 +5,7 @@ import 'package:sell_the_passion/my_page.dart';
 import 'package:sell_the_passion/photo_uploader.dart';
 
 import 'firebase_provider.dart';
+import 'goal_provider.dart';
 import 'package:provider/provider.dart';
 
 SignedInPageState pageState;
@@ -33,6 +34,8 @@ class SignedInPageState extends State<SignedInPage> {
   @override
   Widget build(BuildContext context) {
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
+    Goal goal = Provider.of<Goal>(context);
+
     List<Widget> _screens = <Widget>[
       GoalManagementPage(),
       Container(color: Colors.green),
@@ -60,7 +63,10 @@ class SignedInPageState extends State<SignedInPage> {
         height: 70.0,
         width: 70.0,
         child: FloatingActionButton(
-          onPressed: () async => PhotoUploader.uploadImageToStorage(ImageSource.camera, fp),
+          onPressed: () async {
+            if (goal!=null && goal.startDate!=null)
+              PhotoUploader.uploadImageToStorage(ImageSource.camera, goal.startDate, fp);
+          },
           child: Icon(Icons.camera, size: 60),
         ),
       ),
