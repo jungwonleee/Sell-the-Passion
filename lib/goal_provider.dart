@@ -7,10 +7,12 @@ class Goal with ChangeNotifier {
   int period;
   int currentMoney;
   DateTime startDate;
-  List<bool> authDay;
-  List<String> authImage;
+  List<bool> authDay = [false, false, false, false, false, false, false];
+  List<Map<String, String>> authImage = [];
 
-  void setGoal(String title, String authMethod, int category, int period, int currentMoney, DateTime startDate, List<bool> authDay, List<String> authImage) {
+  bool isPaid = false;
+
+  void setGoal(String title, String authMethod, int category, int period, int currentMoney, DateTime startDate, List<bool> authDay) {
     this.title=title;
     this.authMethod=authMethod;
     this.category=category;
@@ -18,6 +20,5 @@ class Goal with ChangeNotifier {
     this.currentMoney=currentMoney;
     this.startDate=startDate;
     this.authDay=authDay;
-    this.authImage=authImage;
   }
 }

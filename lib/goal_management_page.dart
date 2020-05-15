@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:sell_the_passion/firebase_provider.dart';
 import 'goal_provider.dart';
 import 'package:provider/provider.dart';
-import 'add_goal.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'goal_created_page.dart';
+import 'add_goal_page.dart';
 
 class GoalManagementPage extends StatefulWidget {
   @override
@@ -11,7 +12,6 @@ class GoalManagementPage extends StatefulWidget {
 }
 
 class _GoalManagementPageState extends State<GoalManagementPage> {
-  
   String categoryString(int c) {
     String s="";
     switch(c) {
@@ -46,6 +46,126 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
     DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('${fp.getUser().uid}').child("goal");
     Goal goal = Provider.of<Goal>(context);
 
+    List<Widget> widgetList = <Widget>[
+      Text('등록된 목표가 아직 없습니다.', style: TextStyle(fontSize: 20)),
+      Text('새로운 목표를 세워보세요!', style: TextStyle(fontSize: 20)),
+      SizedBox(height: 20),
+      RaisedButton(
+        color: Colors.white,
+        elevation: 7.0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+        child: Text('목표 세우기', style: TextStyle(fontSize: 15, color: mint)),
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (_) {
+            return AddGoalPage();
+          }));
+        }
+      ),
+    ];
+
+    if (goal.title != null) {
+      widgetList.clear();
+      widgetList += <Widget>[
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text('목표명: ${goal.title}', style: TextStyle(fontSize: 20)),
+            Text('카테고리: ${categoryString(goal.category)}', style: TextStyle(fontSize: 20)),
+            Text('목표기간: ${goal.period+1}주', style: TextStyle(fontSize: 20)),
+            Text('인증요일: ${authDayString(goal.authDay)}', style: TextStyle(fontSize: 20)),
+            Text('인증방법: ${goal.authMethod}', style: TextStyle(fontSize: 20)),
+          ],
+        ),
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            RaisedButton(
+              color: Colors.white,
+              elevation: 7.0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+              child: Text('목표 수정하기', style: TextStyle(fontSize: 15, color: mint)),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) {
+                  return AddGoalPage();
+                }));
+              }
+            ),
+            SizedBox(width: 25),
+            RaisedButton(
+              color: Colors.white,
+              elevation: 7.0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+              child: Text('목표 삭제하기', style: TextStyle(fontSize: 15, color: mint)),
+              onPressed: () {
+                showDialog(context: context, builder: (context) {
+                  return AlertDialog(
+                    //title: Text('오류'),
+                    content: Text('목표를 삭제하시겠습니까?'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('취소', style: TextStyle(color: mint),),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('확인', style: TextStyle(color: mint),),
+                        onPressed: () {
+                          setState(() {
+                            dbRef.remove();
+                            goal.title=null;
+                          });
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  );
+                });
+              }
+            ),
+            SizedBox(width: 25),
+            RaisedButton(
+              color: Colors.white,
+              elevation: 7.0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+              child: Text('결제', style: TextStyle(fontSize: 15, color: mint)),
+              onPressed: () {
+                showDialog(context: context, builder: (context) {
+                  return AlertDialog(
+                    //title: Text('오류'),
+                    content: Text('목표를 결제하시겠습니까?'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('취소', style: TextStyle(color: mint),),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('확인', style: TextStyle(color: mint),),
+                        onPressed: () {
+                          goal.isPaid = true;
+                          goal.startDate = DateTime.now();
+                          setState(() {
+                            dbRef.update({
+                              'is_paid': true,
+                              'start_date': goal.startDate,
+                            });
+                          });
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  );
+                });
+              }
+            ),
+          ],
+        ),
+      ];
+    }
+
     dbRef.once().then((DataSnapshot snapshot) {
       Map<dynamic, dynamic> map = snapshot.value as Map;
       setState(() {
@@ -54,96 +174,20 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
           goal.period = map["period"];
           goal.authMethod = map["auth_method"];
           goal.authDay = List<bool>.from(map["auth_day"]);
+          goal.authImage = List<Map<String, String>>.from(map["auth_image"]);
           goal.category = map["category"];
+          goal.isPaid = map["is_paid"];
         }
       });
     });
 
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children:
-          (goal.title!=null?
-            <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text('목표명: ${goal.title}', style: TextStyle(fontSize: 20)),
-                  Text('카테고리: ${categoryString(goal.category)}', style: TextStyle(fontSize: 20)),
-                  Text('목표기간: ${goal.period+1}주', style: TextStyle(fontSize: 20)),
-                  Text('인증요일: ${authDayString(goal.authDay)}', style: TextStyle(fontSize: 20)),
-                  Text('인증방법: ${goal.authMethod}', style: TextStyle(fontSize: 20)),
-                ],
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  RaisedButton(
-                    color: Colors.white,
-                    elevation: 7.0,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-                    child: Text('목표 수정하기', style: TextStyle(fontSize: 15, color: mint)),
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) {
-                        return AddGoal();
-                      }));
-                    }
-                  ),
-                  SizedBox(width: 25),
-                  RaisedButton(
-                    color: Colors.white,
-                    elevation: 7.0,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-                    child: Text('목표 삭제하기', style: TextStyle(fontSize: 15, color: mint)),
-                    onPressed: () {
-                      showDialog(context: context, builder: (context) {
-                        return AlertDialog(
-                          //title: Text('오류'),
-                          content: Text('목표를 삭제하시겠습니까?'),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text('취소', style: TextStyle(color: mint),),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            FlatButton(
-                              child: Text('확인', style: TextStyle(color: mint),),
-                              onPressed: () {
-                                setState(() {
-                                  dbRef.remove();
-                                  goal.title=null;
-                                });
-                                Navigator.pop(context);
-                              },
-                            )
-                          ],
-                        );
-                      });
-                    }
-                  ),
-                ],
-              ),
-            ] : <Widget>[
-              Text('등록된 목표가 아직 없습니다.', style: TextStyle(fontSize: 20)),
-              Text('새로운 목표를 세워보세요!', style: TextStyle(fontSize: 20)),
-              SizedBox(height: 20),
-              RaisedButton(
-                color: Colors.white,
-                elevation: 7.0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-                child: Text('목표 세우기', style: TextStyle(fontSize: 15, color: mint)),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) {
-                    return AddGoal();
-                  }));
-                }
-              ),
-            ]
-          )
-        ),
+    if (goal.isPaid)
+      return GoalCreatedPage();
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: widgetList,
       )
     );
   }

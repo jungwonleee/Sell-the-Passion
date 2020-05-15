@@ -22,7 +22,7 @@ class PhotoUploader {
     StorageReference storageReference =
       _firebaseStorage.ref().child("certification_photo/${_user.uid}_$now");
     DatabaseReference databaseReference = 
-      _firebaseDatabase.reference().child("${_user.uid}").child("posts");
+      _firebaseDatabase.reference().child("${_user.uid}").child("goal").child("auth_image");
     StorageUploadTask storageUploadTask = storageReference.putFile(_image);
     await storageUploadTask.onComplete;
     String url = await storageReference.getDownloadURL();

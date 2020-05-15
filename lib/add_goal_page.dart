@@ -4,14 +4,14 @@ import 'package:provider/provider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'firebase_provider.dart';
 
-class AddGoal extends StatefulWidget {
+class AddGoalPage extends StatefulWidget {
   @override
-  _AddGoalState createState() => _AddGoalState();
+  _AddGoalPageState createState() => _AddGoalPageState();
 }
 
 const Color mint = Color(0xFF66A091);
 
-class _AddGoalState extends State<AddGoal> {
+class _AddGoalPageState extends State<AddGoalPage> {
   List<int> value = new List(2); // value[0]은 카테고리 값, value[1]은 period값
   List<bool> authDay = [false, false, false, false, false, false, false];
   TextEditingController goalTitleController = TextEditingController();
@@ -54,26 +54,15 @@ class _AddGoalState extends State<AddGoal> {
               if (valid) {
                 goal.setGoal(
                   goalTitleController.text, authMethodController.text, value[0], value[1],
-                  null, null, authDay, null
+                  null, null, authDay
                 );
-                if (isNew) {
-                  dbRef.set({
-                    'title': goal.title,
-                    'auth_method': goal.authMethod,
-                    'category': goal.category,
-                    'period': goal.period,
-                    'auth_day': goal.authDay,
-                  });
-                }
-                else {
-                  dbRef.update({
-                    'title': goal.title,
-                    'auth_method': goal.authMethod,
-                    'category': goal.category,
-                    'period': goal.period,
-                    'auth_day': goal.authDay,
-                  });
-                }
+                dbRef.update({
+                  'title': goal.title,
+                  'auth_method': goal.authMethod,
+                  'category': goal.category,
+                  'period': goal.period,
+                  'auth_day': goal.authDay,
+                });
                 Navigator.pop(context);
               }
               else {
