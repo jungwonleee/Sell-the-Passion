@@ -62,6 +62,8 @@ class _AddGoalPageState extends State<AddGoalPage> {
                   'category': goal.category,
                   'period': goal.period,
                   'auth_day': goal.authDay,
+                  'auth_image': goal.authImage,
+                  'is_paid': false,
                 });
                 Navigator.pop(context);
               }

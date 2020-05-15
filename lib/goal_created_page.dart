@@ -186,10 +186,6 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
           itemBuilder: (context, index) {
             var day = days[index];
 
-            goal.authImage.map((e) {
-              print(e);
-            });
-
             return Container(
               margin: EdgeInsets.symmetric(horizontal: 3.0),
               color: Color(0xFFB8C6D4),

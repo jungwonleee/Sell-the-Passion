@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'goal_created_page.dart';
 import 'add_goal_page.dart';
+import 'package:intl/intl.dart';
 
 class GoalManagementPage extends StatefulWidget {
   @override
@@ -150,7 +151,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                           setState(() {
                             dbRef.update({
                               'is_paid': true,
-                              'start_date': goal.startDate,
+                              'start_date': (new DateFormat('yyyy-MM-dd')).format(goal.startDate),
                             });
                           });
                           Navigator.pop(context);
@@ -168,20 +169,19 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
 
     dbRef.once().then((DataSnapshot snapshot) {
       Map<dynamic, dynamic> map = snapshot.value as Map;
-      setState(() {
-        if (map != null) {
-          goal.title = map["title"];
-          goal.period = map["period"];
-          goal.authMethod = map["auth_method"];
-          goal.authDay = List<bool>.from(map["auth_day"]);
-          goal.authImage = List<Map<String, String>>.from(map["auth_image"]);
-          goal.category = map["category"];
-          goal.isPaid = map["is_paid"];
-        }
-      });
+      if (map != null) {
+        goal.title = map["title"];
+        goal.period = map["period"];
+        goal.authMethod = map["auth_method"];
+        goal.authDay = List<bool>.from(map["auth_day"]);
+        //goal.authImage = Map<String, String>.from(map["auth_image"]);
+        goal.category = map["category"];
+        goal.isPaid = map["is_paid"];
+      }
+      setState(() {});
     });
 
-    if (goal.isPaid)
+    if (goal != null && goal.isPaid != null && goal.isPaid)
       return GoalCreatedPage();
 
     return Center(

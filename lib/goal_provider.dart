@@ -8,7 +8,7 @@ class Goal with ChangeNotifier {
   int currentMoney;
   DateTime startDate;
   List<bool> authDay = [false, false, false, false, false, false, false];
-  List<Map<String, String>> authImage = [];
+  Map<String, String> authImage = {};
 
   bool isPaid = false;
 
