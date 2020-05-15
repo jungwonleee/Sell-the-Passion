@@ -2,6 +2,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'goal_provider.dart';
 
+import 'package:intl/intl.dart';
+
 GoalCreatedPageState pageState;
 
 class GoalCreatedPage extends StatefulWidget {
@@ -19,7 +21,7 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
   @override
   Widget build(BuildContext context) {
 
-    Goal goal = Provider.of(context, listen: false);
+    Goal goal = Provider.of(context);
 
     Color mint = Theme.of(context).primaryColor;
     Color brown = Theme.of(context).accentColor;
@@ -163,33 +165,39 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
 
     Widget weekImage(int week) {
       List<String> days = [
-        '월', '화', '수', '목', '금', '토', '일'
+        '일', '월', '화', '수', '목', '금', '토'
       ];
 
-      int num = 0;
-      if (goal.authDay != null) {
-        List<String> _days = [];
-        for(int i=0;i<7;i++) {
-          if (goal.authDay[i]) {
-            _days.add(days[i]);
-            num++;
-          }
-        }
-        days = _days;
-      }
       return SizedBox(
         height: 120.0,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: num,
-          itemExtent: 128.0,
+          itemCount: 7,
           itemBuilder: (context, index) {
-            var day = days[index];
+            int i = week;
+            int j = index;
 
-            return Container(
-              margin: EdgeInsets.symmetric(horizontal: 3.0),
-              color: Color(0xFFB8C6D4),
-              child: Center(child: Text(day, style: TextStyle(fontFamily: 'Apple Semibold', fontSize: 30, color: Colors.white))),
+            DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+            int startDay = dateFormat.parse(goal.startDate).weekday;
+            var day = days[(index+startDay)%7];
+
+            int imgIdx = i * 7 + j;
+            if (goal.authImage["$imgIdx"] != "" && goal.authImage["$imgIdx"] != null) {
+              return Image.network(goal.authImage["$imgIdx"]);
+            }
+
+            if (goal.authDay[(j+startDay)%7]) {
+              return Container(
+                margin: EdgeInsets.symmetric(horizontal: 4.0),
+                width:120.0,
+                height:120.0,
+                color: Color(0xFFB8C6D4),
+                child: Center(child: Text(day, style: TextStyle(fontFamily: 'Apple Semibold', fontSize: 30, color: Colors.white))),
+              );
+            }
+
+            return SizedBox(
+              width:0
             );
           }
         ),

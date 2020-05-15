@@ -10,14 +10,14 @@ import 'package:intl/intl.dart';
 import 'firebase_provider.dart';
 
 class PhotoUploader {
-  static void uploadImageToStorage(ImageSource source, FirebaseProvider fp) async {
+  static void uploadImageToStorage(ImageSource source, String startDate, FirebaseProvider fp) async {
     FirebaseUser _user = fp.getUser();
     FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
     FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
 
     File _image = await ImagePicker.pickImage(source: source);
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd");
     DateTime now = new DateTime.now();
-    String today = (new DateFormat('yyyy-MM-dd')).format(now);
 
     StorageReference storageReference =
       _firebaseStorage.ref().child("certification_photo/${_user.uid}_$now");
@@ -27,7 +27,7 @@ class PhotoUploader {
     await storageUploadTask.onComplete;
     String url = await storageReference.getDownloadURL();
     databaseReference.update({
-      "$today": url
+      "${now.difference(dateFormat.parse(startDate)).inDays}": url
     });
   }
 }

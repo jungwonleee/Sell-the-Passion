@@ -147,11 +147,11 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                         child: Text('확인', style: TextStyle(color: mint),),
                         onPressed: () {
                           goal.isPaid = true;
-                          goal.startDate = DateTime.now();
+                          goal.startDate = (new DateFormat('yyyy-MM-dd')).format(DateTime.now());
                           setState(() {
                             dbRef.update({
                               'is_paid': true,
-                              'start_date': (new DateFormat('yyyy-MM-dd')).format(goal.startDate),
+                              'start_date': goal.startDate,
                             });
                           });
                           Navigator.pop(context);
@@ -174,9 +174,11 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
         goal.period = map["period"];
         goal.authMethod = map["auth_method"];
         goal.authDay = List<bool>.from(map["auth_day"]);
-        //goal.authImage = Map<String, String>.from(map["auth_image"]);
+        if (map["auth_image"] != null)
+          goal.authImage = Map<String, String>.from(map["auth_image"]);
         goal.category = map["category"];
         goal.isPaid = map["is_paid"];
+        goal.startDate = map["start_date"];
       }
       setState(() {});
     });
