@@ -6,6 +6,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'goal_created_page.dart';
 import 'add_goal_page.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 
 class GoalManagementPage extends StatefulWidget {
   @override
@@ -147,11 +148,11 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                         child: Text('확인', style: TextStyle(color: mint),),
                         onPressed: () {
                           goal.isPaid = true;
-                          goal.startDate = (new DateFormat('yyyy-MM-dd')).format(DateTime.now());
+                          goal.startDate = DateTime.now();
                           setState(() {
                             dbRef.update({
                               'is_paid': true,
-                              'start_date': goal.startDate,
+                              'start_date': (new DateFormat('yyyy-MM-dd')).format(goal.startDate),
                             });
                           });
                           Navigator.pop(context);
@@ -178,7 +179,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
           goal.authImage = Map<String, String>.from(map["auth_image"]);
         goal.category = map["category"];
         goal.isPaid = map["is_paid"];
-        goal.startDate = map["start_date"];
+        goal.startDate = DateFormat("yy-MM-dd").parse(map["start_date"]);
       }
       setState(() {});
     });

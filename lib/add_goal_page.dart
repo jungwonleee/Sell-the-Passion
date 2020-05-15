@@ -53,8 +53,7 @@ class _AddGoalPageState extends State<AddGoalPage> {
               valid=isValid();
               if (valid) {
                 goal.setGoal(
-                  goalTitleController.text, authMethodController.text, value[0], value[1],
-                  null, null, authDay
+                  goalTitleController.text, authMethodController.text, value[0], value[1], 1234567, DateTime.now(), authDay
                 );
                 dbRef.update({
                   'title': goal.title,

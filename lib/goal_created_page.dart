@@ -50,7 +50,7 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                       Radius.circular(5.0)
                     )
                   ),
-                  child: Text('건강', style: TextStyle(
+                  child: Text('${['건강','취미','학습'][goal.category]}', style: TextStyle(
                       color: brown, fontSize: 15.0, fontFamily: 'Apple Semibold')
                   ),
                 ),
@@ -63,7 +63,7 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                       Radius.circular(5.0)
                     )
                   ),
-                  child: Text('${goal.period}주', style: TextStyle(
+                  child: Text('${goal.period+1}주', style: TextStyle(
                       color: brown, fontSize: 15.0, fontFamily: 'Apple Semibold')
                   ),
                 )
@@ -82,7 +82,8 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                       Radius.circular(10.0)
                     )
                   ),
-                  child: Text('Day 5', style: TextStyle(
+                  child: Text('Day ${DateTime.now().difference(goal.startDate).inDays}', style: TextStyle(
+                  //child: Text('', style: TextStyle(
                       color: mint, fontSize: 40.0, fontFamily: 'Apple Semibold')
                   ),
                 ),
@@ -103,10 +104,10 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text('3,000원', style: TextStyle(
+                          Text('16,800원', style: TextStyle(
                             fontFamily: 'Apple Semibold', fontSize: 25.0, color: mint
                           ),),
-                          Text('16,800원', style: TextStyle(
+                          Text('${NumberFormat("#,###", "en_US").format(goal.currentMoney)}원', style: TextStyle(
                             fontFamily: 'Apple Semibold', fontSize: 25.0
                           ),),
                         ],
@@ -124,14 +125,22 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                     children: <Widget>[
                       Text('목표기간', style: apple),
                       SizedBox(width: 10.0),
-                      Text('2020년 4월 6일 ~ 2020년 5월 3일', style: apple)
+                      Text('${DateFormat('yyyy년 MM월 dd일').format(goal.startDate)} ~ ${DateFormat('yyyy년 MM월 dd일').format(goal.startDate.add(Duration(days: 7*(goal.period+1))))}', style: apple)
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text('인증횟수', style: apple),
+                      Text('인증요일', style: apple),
                       SizedBox(width: 10.0),
-                      Text('매일', style: apple)
+                      (() {
+                        String str = "";
+                        List days = ["일","월","화","수","목","금","토"];
+                        for (int i=0;i<7;i++) {
+                          if(!goal.authDay[i]) continue;
+                          str += days[i] + " ";
+                        }
+                        return Text(str, style: apple);
+                      })()
                     ],
                   ),
                   Row(
@@ -176,9 +185,10 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
           itemBuilder: (context, index) {
             int i = week;
             int j = index;
-
-            DateFormat dateFormat = DateFormat("yyyy-MM-dd");
-            int startDay = dateFormat.parse(goal.startDate).weekday;
+            int startDay = 0;
+            if (goal.startDate!=null) {
+              startDay = goal.startDate.weekday;
+            }
             var day = days[(index+startDay)%7];
 
             int imgIdx = i * 7 + j;
@@ -214,7 +224,7 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              weekText(index+1, '4월 6일 ~ 4월 12일'),
+              weekText(index+1, '${DateFormat('yyyy년 MM월 dd일').format(goal.startDate.add(Duration(days: 7*index)))} ~ ${DateFormat('yyyy년 MM월 dd일').format(goal.startDate.add(Duration(days: 7*(index+1)-1)))}'),
               SizedBox(height: 8),
               weekImage(index),
               SizedBox(height: 10),
