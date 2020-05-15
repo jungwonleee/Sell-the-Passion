@@ -182,8 +182,8 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
             var day = days[(index+startDay)%7];
 
             int imgIdx = i * 7 + j;
-            if (goal.authImage["$imgIdx"] != "" && goal.authImage["$imgIdx"] != null) {
-              return Image.network(goal.authImage["$imgIdx"]);
+            if (goal.authImage["0$imgIdx"] != "" && goal.authImage["0$imgIdx"] != null) {
+              return Image.network(goal.authImage["0$imgIdx"]);
             }
 
             if (goal.authDay[(j+startDay)%7]) {

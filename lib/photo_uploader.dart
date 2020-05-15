@@ -26,8 +26,8 @@ class PhotoUploader {
     StorageUploadTask storageUploadTask = storageReference.putFile(_image);
     await storageUploadTask.onComplete;
     String url = await storageReference.getDownloadURL();
-    databaseReference.update({
-      "${now.difference(dateFormat.parse(startDate)).inDays}": url
+    databaseReference.update(<String, String>{
+      "0${now.difference(dateFormat.parse(startDate)).inDays}": url
     });
   }
 }

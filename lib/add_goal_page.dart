@@ -154,13 +154,13 @@ class _AddGoalPageState extends State<AddGoalPage> {
                 Wrap(
                   spacing: 10.0,
                   children: <Widget>[
-                    buildFilterChip(0, '월'),
-                    buildFilterChip(1, '화'),
-                    buildFilterChip(2, '수'),
-                    buildFilterChip(3, '목'),
-                    buildFilterChip(4, '금'),
-                    buildFilterChip(5, '토'),
-                    buildFilterChip(6, '일'),
+                    buildFilterChip(0, '일'),
+                    buildFilterChip(1, '월'),
+                    buildFilterChip(2, '화'),
+                    buildFilterChip(3, '수'),
+                    buildFilterChip(4, '목'),
+                    buildFilterChip(5, '금'),
+                    buildFilterChip(6, '토'),
                   ],
                 ),
                 Container(
