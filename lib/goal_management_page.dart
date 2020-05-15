@@ -101,7 +101,6 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
               onPressed: () {
                 showDialog(context: context, builder: (context) {
                   return AlertDialog(
-                    //title: Text('오류'),
                     content: Text('목표를 삭제하시겠습니까?'),
                     actions: <Widget>[
                       FlatButton(
@@ -134,7 +133,6 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
               onPressed: () {
                 showDialog(context: context, builder: (context) {
                   return AlertDialog(
-                    //title: Text('오류'),
                     content: Text('목표를 결제하시겠습니까?'),
                     actions: <Widget>[
                       FlatButton(
@@ -152,6 +150,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                             dbRef.update({
                               'is_paid': true,
                               'start_date': goal.startDate,
+                              'current_money': 0,
                             });
                           });
                           Navigator.pop(context);
@@ -179,6 +178,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
         goal.category = map["category"];
         goal.isPaid = map["is_paid"];
         goal.startDate = map["start_date"];
+        goal.currentMoney = map["current_money"];
       }
       setState(() {});
     });
