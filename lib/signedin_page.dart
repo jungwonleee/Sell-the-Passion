@@ -3,7 +3,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sell_the_passion/goal_management_page.dart';
 import 'package:sell_the_passion/my_page.dart';
 import 'package:sell_the_passion/photo_uploader.dart';
-
 import 'firebase_provider.dart';
 import 'goal_provider.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +16,8 @@ class SignedInPage extends StatefulWidget {
     return pageState;
   }
 }
+
+const Color mint = Color(0xFF66A091);
 
 class SignedInPageState extends State<SignedInPage> {
   int _selectedIndex = 0;
@@ -35,6 +36,8 @@ class SignedInPageState extends State<SignedInPage> {
   Widget build(BuildContext context) {
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
     Goal goal = Provider.of<Goal>(context);
+    DateTime now = new DateTime.now();
+    List<String> appBarTitle = ['목표관리','후원관리','','알림','마이페이지'];
 
     List<Widget> _screens = <Widget>[
       GoalManagementPage(),
@@ -46,17 +49,18 @@ class SignedInPageState extends State<SignedInPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Welcome", style: applesb),
+        title: Text(appBarTitle[_selectedIndex], style: applesb),
         backgroundColor: Theme.of(context).primaryColor,
-        actions: <Widget>[
+        actions: _selectedIndex == 4 ? <Widget>[
           FlatButton(
             child: Text('로그아웃', style: TextStyle(
               fontFamily: 'Apple Semibold',
-              color: Colors.white)
+              color: Colors.white,
+              fontSize: 18)
             ),
             onPressed: fp.signOut,
           )
-        ],
+        ] : null
       ),
       body: _screens[_selectedIndex],
       floatingActionButton: SizedBox(
@@ -64,8 +68,39 @@ class SignedInPageState extends State<SignedInPage> {
         width: 70.0,
         child: FloatingActionButton(
           onPressed: () async {
-            if (goal!=null && goal.startDate!=null)
-              PhotoUploader.uploadImageToStorage(ImageSource.camera, goal.startDate, fp);
+            if (goal == null || goal.startDate == null) {
+              showDialog(context: context, builder: (context) {
+                return AlertDialog(
+                  title: Text('오류'),
+                  content: Text('목표를 먼저 등록해주세요.'),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('확인', style: TextStyle(color: mint),),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    )
+                  ],
+                );
+              });
+            }
+            else if (!goal.authDay[now.weekday%7]) {
+              showDialog(context: context, builder: (context) {
+                return AlertDialog(
+                  title: Text('오류'),
+                  content: Text('오늘은 인증 날짜가 아닙니다.'),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('확인', style: TextStyle(color: mint),),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    )
+                  ],
+                );
+              });
+            }
+            else PhotoUploader.uploadImageToStorage(ImageSource.camera, goal.startDate, fp);
           },
           child: Icon(Icons.camera, size: 60),
         ),
@@ -93,11 +128,11 @@ class SignedInPageState extends State<SignedInPage> {
               title: Text('인증하기', style: TextStyle(color: Colors.transparent)),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.event_note),
-              title: Text('뉴스피드', style: optionText),
+              icon: Icon(Icons.notifications),
+              title: Text('알림', style: optionText),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
+              icon: Icon(Icons.person),
               title: Text('마이페이지', style: optionText),
             ),
           ],

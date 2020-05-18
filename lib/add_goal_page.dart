@@ -16,7 +16,7 @@ class _AddGoalPageState extends State<AddGoalPage> {
   List<bool> authDay = [false, false, false, false, false, false, false];
   TextEditingController goalTitleController = TextEditingController();
   TextEditingController authMethodController = TextEditingController();
-  bool valid, isNew;
+  bool valid;
 
   @override
   void initState() {
@@ -29,9 +29,7 @@ class _AddGoalPageState extends State<AddGoalPage> {
         value[0] = goal.category;
         value[1] = goal.period;
         authDay = goal.authDay;
-        isNew = false;
       }
-      else isNew = true;
     });
   }
 
@@ -176,7 +174,7 @@ class _AddGoalPageState extends State<AddGoalPage> {
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
-                      hintText: '20자 이내로 작성해주세요'
+                      hintText: '한 문장으로 작성해주세요'
                     ),
                     cursorColor: Theme.of(context).accentColor,
                     controller: authMethodController,

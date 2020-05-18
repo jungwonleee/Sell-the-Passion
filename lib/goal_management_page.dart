@@ -5,8 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'goal_created_page.dart';
 import 'add_goal_page.dart';
-import 'package:intl/intl.dart';
-import 'package:intl/intl.dart';
 
 class GoalManagementPage extends StatefulWidget {
   @override
@@ -102,7 +100,6 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
               onPressed: () {
                 showDialog(context: context, builder: (context) {
                   return AlertDialog(
-                    //title: Text('오류'),
                     content: Text('목표를 삭제하시겠습니까?'),
                     actions: <Widget>[
                       FlatButton(
@@ -135,7 +132,6 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
               onPressed: () {
                 showDialog(context: context, builder: (context) {
                   return AlertDialog(
-                    //title: Text('오류'),
                     content: Text('목표를 결제하시겠습니까?'),
                     actions: <Widget>[
                       FlatButton(
@@ -152,7 +148,8 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                           setState(() {
                             dbRef.update({
                               'is_paid': true,
-                              'start_date': (new DateFormat('yyyy-MM-dd')).format(goal.startDate),
+                              'start_date': goal.startDate,
+                              'current_money': 0,
                             });
                           });
                           Navigator.pop(context);
@@ -179,7 +176,8 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
           goal.authImage = Map<String, String>.from(map["auth_image"]);
         goal.category = map["category"];
         goal.isPaid = map["is_paid"];
-        goal.startDate = DateFormat("yy-MM-dd").parse(map["start_date"]);
+        goal.startDate = map["start_date"];
+        goal.currentMoney = map["current_money"];
       }
       setState(() {});
     });

@@ -1,8 +1,9 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'goal_provider.dart';
-
 import 'package:intl/intl.dart';
+import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+
 
 GoalCreatedPageState pageState;
 
@@ -17,6 +18,7 @@ class GoalCreatedPage extends StatefulWidget {
 
 class GoalCreatedPageState extends State<GoalCreatedPage> {
   TextStyle apple = TextStyle(fontSize: 15.0, fontFamily: 'Apple Semibold');
+  List<String> categorystring = ['건강', '학습', '취미'];
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,29 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
 
     Color mint = Theme.of(context).primaryColor;
     Color brown = Theme.of(context).accentColor;
+
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+    DateTime now = new DateTime.now();
+    DateTime startDate = goal.startDate;
+    DateTime endDate = startDate.add(Duration(days: (goal.period+1)*7-1));
+    int daysDiff = now.difference(startDate).inDays;
+    List<String> days = ['일', '월', '화', '수', '목', '금', '토'];
+
+    String authDayString(List<bool> authDay) {
+      String s='';
+      for (int i=0; i<7; i++) {
+        if (authDay[i]) {
+          s+=days[i];
+          s+=' ';
+        }
+      }
+      return s;
+    }
+
+    String moneyString(int money) {
+      double d = money.toDouble();
+      return FlutterMoneyFormatter(amount: d).output.withoutFractionDigits;
+    }
 
     Widget goalInfo() {
       return Container(
@@ -50,7 +75,7 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                       Radius.circular(5.0)
                     )
                   ),
-                  child: Text('${['건강','취미','학습'][goal.category]}', style: TextStyle(
+                  child: Text('${categorystring[goal.category]}', style: TextStyle(
                       color: brown, fontSize: 15.0, fontFamily: 'Apple Semibold')
                   ),
                 ),
@@ -82,8 +107,7 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                       Radius.circular(10.0)
                     )
                   ),
-                  child: Text('Day ${DateTime.now().difference(goal.startDate).inDays}', style: TextStyle(
-                  //child: Text('', style: TextStyle(
+                  child: Text('Day ${daysDiff+1}', style: TextStyle(
                       color: mint, fontSize: 40.0, fontFamily: 'Apple Semibold')
                   ),
                 ),
@@ -104,10 +128,10 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text('16,800원', style: TextStyle(
+                          Text('${moneyString(goal.currentMoney)}원', style: TextStyle(
                             fontFamily: 'Apple Semibold', fontSize: 25.0, color: mint
                           ),),
-                          Text('${NumberFormat("#,###", "en_US").format(goal.currentMoney)}원', style: TextStyle(
+                          Text('${moneyString((goal.period+1)*4200)}원', style: TextStyle(
                             fontFamily: 'Apple Semibold', fontSize: 25.0
                           ),),
                         ],
@@ -125,22 +149,14 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                     children: <Widget>[
                       Text('목표기간', style: apple),
                       SizedBox(width: 10.0),
-                      Text('${DateFormat('yyyy년 MM월 dd일').format(goal.startDate)} ~ ${DateFormat('yyyy년 MM월 dd일').format(goal.startDate.add(Duration(days: 7*(goal.period+1))))}', style: apple)
+                      Text('${startDate.year}년 ${startDate.month}월 ${startDate.day}일 ~ ${endDate.year}년 ${endDate.month}월 ${endDate.day}일', style: apple)
                     ],
                   ),
                   Row(
                     children: <Widget>[
                       Text('인증요일', style: apple),
                       SizedBox(width: 10.0),
-                      (() {
-                        String str = "";
-                        List days = ["일","월","화","수","목","금","토"];
-                        for (int i=0;i<7;i++) {
-                          if(!goal.authDay[i]) continue;
-                          str += days[i] + " ";
-                        }
-                        return Text(str, style: apple);
-                      })()
+                      Text('${authDayString(goal.authDay)}', style: apple)
                     ],
                   ),
                   Row(
@@ -173,10 +189,6 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
     }
 
     Widget weekImage(int week) {
-      List<String> days = [
-        '일', '월', '화', '수', '목', '금', '토'
-      ];
-
       return SizedBox(
         height: 120.0,
         child: ListView.builder(
@@ -214,6 +226,10 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
       );
     }
 
+    String weekDateString(DateTime weekStart, DateTime weekEnd) {
+      String s='${weekStart.month}월 ${weekStart.day}일 ~ ${weekEnd.month}월 ${weekEnd.day}일';
+      return s;
+    }
     ListView goalRows = ListView.builder(
       scrollDirection: Axis.vertical,
       itemCount: goal.period+1,
@@ -224,7 +240,7 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              weekText(index+1, '${DateFormat('yyyy년 MM월 dd일').format(goal.startDate.add(Duration(days: 7*index)))} ~ ${DateFormat('yyyy년 MM월 dd일').format(goal.startDate.add(Duration(days: 7*(index+1)-1)))}'),
+              weekText(index+1, weekDateString(startDate.add(Duration(days: 7*index)), startDate.add(Duration(days: 7*index+6)))),
               SizedBox(height: 8),
               weekImage(index),
               SizedBox(height: 10),
