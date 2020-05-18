@@ -1,7 +1,6 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'goal_provider.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 
 
@@ -28,7 +27,6 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
     Color mint = Theme.of(context).primaryColor;
     Color brown = Theme.of(context).accentColor;
 
-    DateFormat dateFormat = DateFormat("yyyy-MM-dd");
     DateTime now = new DateTime.now();
     DateTime startDate = goal.startDate;
     DateTime endDate = startDate.add(Duration(days: (goal.period+1)*7-1));
@@ -205,7 +203,25 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
 
             int imgIdx = i * 7 + j;
             if (goal.authImage["0$imgIdx"] != "" && goal.authImage["0$imgIdx"] != null) {
-              return Image.network(goal.authImage["0$imgIdx"]);
+              return new Container(
+                margin: EdgeInsets.symmetric(horizontal: 4.0),
+                width:120.0,
+                height:120.0,
+                child: new Image.network(
+                  goal.authImage["0$imgIdx"], 
+                  fit: BoxFit.fill,
+                  loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null ? 
+                            loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                            : null,
+                      ),
+                    );
+                  }
+                ),
+              );
             }
 
             if (goal.authDay[(j+startDay)%7]) {

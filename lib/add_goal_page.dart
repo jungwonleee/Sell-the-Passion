@@ -50,18 +50,22 @@ class _AddGoalPageState extends State<AddGoalPage> {
             onPressed: () {
               valid=isValid();
               if (valid) {
-                goal.setGoal(
-                  goalTitleController.text, authMethodController.text, value[0], value[1], 1234567, DateTime.now(), authDay
-                );
+                goal.title = goalTitleController.text;
+                goal.category = value[0];
+                goal.authMethod = authMethodController.text;
+                goal.period = value[1];
+                goal.authDay = authDay;
+
                 dbRef.update({
                   'title': goal.title,
-                  'auth_method': goal.authMethod,
                   'category': goal.category,
+                  'auth_method': goal.authMethod,
                   'period': goal.period,
                   'auth_day': goal.authDay,
                   'auth_image': goal.authImage,
                   'is_paid': false,
                 });
+
                 Navigator.pop(context);
               }
               else {

@@ -20,8 +20,6 @@ class AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     fp = Provider.of<FirebaseProvider>(context);
-
-    logger.d("user: ${fp.getUser()}");
     if (fp.getUser() != null && fp.getUser().isEmailVerified == true) {
       return SignedInPage();
     } else {

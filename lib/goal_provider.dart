@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Goal with ChangeNotifier {
-  String title = "";
-  String authMethod = "";
-  int category = 0;
-  int period = 0;
-  int currentMoney = 1234567;
-  DateTime startDate = DateTime.now();
+  String title;
+  String authMethod;
+  int category;
+  int period;
+  int currentMoney;
+  DateTime startDate;
   List<bool> authDay = [false, false, false, false, false, false, false];
   Map<String, String> authImage = {};
 
   bool isPaid = false;
-
-  void setGoal(String title, String authMethod, int category, int period, int currentMoney, DateTime startDate, List<bool> authDay) {
-    this.title=title;
-    this.authMethod=authMethod;
-    this.category=category;
-    this.period=period;
-    this.currentMoney=currentMoney;
-    this.startDate=startDate;
-    this.authDay=authDay;
-  }
 }

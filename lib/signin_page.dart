@@ -28,7 +28,6 @@ class SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     fp = Provider.of<FirebaseProvider>(context);
-    logger.d(fp.getUser());
 
     TextStyle title = TextStyle(
       fontFamily: 'Apple Semibold',

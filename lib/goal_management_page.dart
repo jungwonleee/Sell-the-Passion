@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sell_the_passion/firebase_provider.dart';
-import 'goal_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
+
+import 'goal_provider.dart';
+
 import 'goal_created_page.dart';
 import 'add_goal_page.dart';
 
@@ -148,7 +151,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                           setState(() {
                             dbRef.update({
                               'is_paid': true,
-                              'start_date': goal.startDate,
+                              'start_date': DateFormat('yyyy-MM-dd').format(goal.startDate),
                               'current_money': 0,
                             });
                           });
@@ -172,24 +175,48 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
         goal.period = map["period"];
         goal.authMethod = map["auth_method"];
         goal.authDay = List<bool>.from(map["auth_day"]);
-        if (map["auth_image"] != null)
-          goal.authImage = Map<String, String>.from(map["auth_image"]);
         goal.category = map["category"];
         goal.isPaid = map["is_paid"];
-        goal.startDate = map["start_date"];
+      }
+      if (goal.isPaid) {
+        if (map["auth_image"] != null)
+          goal.authImage = Map<String, String>.from(map["auth_image"]);
+        goal.startDate = DateFormat('yyyy-MM-dd').parse(map["start_date"]);
         goal.currentMoney = map["current_money"];
       }
       setState(() {});
     });
 
-    if (goal != null && goal.isPaid != null && goal.isPaid)
-      return GoalCreatedPage();
+    return FutureBuilder(
+      future: dbRef.once(),
+      builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
+        if (snapshot.hasData) {
+          Map<dynamic, dynamic> map = snapshot.data.value as Map;
+          if (map != null) {
+            goal.title = map["title"];
+            goal.period = map["period"];
+            goal.authMethod = map["auth_method"];
+            goal.authDay = List<bool>.from(map["auth_day"]);
+            goal.category = map["category"];
+            goal.isPaid = map["is_paid"];
+          }
 
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: widgetList,
-      )
+          if (goal.isPaid) {
+            if (map["auth_image"] != null)
+              goal.authImage = Map<String, String>.from(map["auth_image"]);
+            goal.startDate = DateFormat('yyyy-MM-dd').parse(map["start_date"]);
+            goal.currentMoney = map["current_money"];
+            return GoalCreatedPage();
+          }
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: widgetList,
+            )
+          );
+        }
+        return Center( child: CircularProgressIndicator() );
+      }
     );
   }
 }
