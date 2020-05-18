@@ -60,14 +60,15 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
         padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
         child: Column(
           children: <Widget>[
+            Text(goal.title, style: TextStyle(
+              fontFamily: 'Apple Semibold',
+              fontSize: 28,
+            ), softWrap: true),
             Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Text(goal.title, style: TextStyle(
-                  fontFamily: 'Apple Semibold',
-                  fontSize: 28
-                ),),
                 Container(
-                  margin: const EdgeInsets.fromLTRB(12.0, 4.0, 0.0, 0.0),
+                  margin: const EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 0.0),
                   padding: const EdgeInsets.fromLTRB(7.0, 0.0, 7.0, 1.0),
                   decoration: BoxDecoration(
                     border: Border.all(color: brown, width: 1.5),

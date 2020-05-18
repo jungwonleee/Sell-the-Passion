@@ -47,6 +47,9 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
     DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('${fp.getUser().uid}').child("goal");
     Goal goal = Provider.of<Goal>(context);
 
+    Color mint = Theme.of(context).primaryColor;
+    Color brown = Theme.of(context).accentColor;
+
     List<Widget> widgetList = <Widget>[
       Text('등록된 목표가 아직 없습니다.', style: TextStyle(fontSize: 20)),
       Text('새로운 목표를 세워보세요!', style: TextStyle(fontSize: 20)),
@@ -67,73 +70,83 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
     if (goal.title != null) {
       widgetList.clear();
       widgetList += <Widget>[
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text('목표명: ${goal.title}', style: TextStyle(fontSize: 20)),
-            Text('카테고리: ${categoryString(goal.category)}', style: TextStyle(fontSize: 20)),
-            Text('목표기간: ${goal.period+1}주', style: TextStyle(fontSize: 20)),
-            Text('인증요일: ${authDayString(goal.authDay)}', style: TextStyle(fontSize: 20)),
-            Text('인증방법: ${goal.authMethod}', style: TextStyle(fontSize: 20)),
-          ],
+        Container(
+          width: MediaQuery.of(context).size.width*0.8,
+          child: Text('${goal.title}', style: TextStyle(fontSize: 28), textAlign: TextAlign.center),
         ),
-        SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            RaisedButton(
-              color: Colors.white,
-              elevation: 7.0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-              child: Text('목표 수정하기', style: TextStyle(fontSize: 15, color: mint)),
+            Container(
+              margin: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 0.0),
+              padding: const EdgeInsets.fromLTRB(7.0, 0.0, 7.0, 1.0),
+              decoration: BoxDecoration(
+                border: Border.all(color: brown, width: 1.5),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5.0)
+                )
+              ),
+              child: Text('${categoryString(goal.category)}', style: TextStyle(
+                  color: brown, fontSize: 15.0)
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 0.0),
+              padding: const EdgeInsets.fromLTRB(7.0, 0.0, 7.0, 1.0),
+              decoration: BoxDecoration(
+                border: Border.all(color: brown, width: 1.5),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5.0)
+                )
+              ),
+              child: Text('${goal.period+1}주', style: TextStyle(
+                  color: brown, fontSize: 15.0)
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 10),
+        Container(
+          width: MediaQuery.of(context).size.width*0.7,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text('인증요일   ${authDayString(goal.authDay)}', style: TextStyle(fontSize: 15)),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                Text('인증방법', style: TextStyle(fontSize: 15)),
+                SizedBox(width: 12),
+                Flexible(
+                  child: Text('${goal.authMethod}', style: TextStyle(fontSize: 15), softWrap: true)
+                ),
+              ]),
+            ],
+          ),
+        ),
+        SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            IconButton(
+              color: brown,
+              icon: Icon(Icons.edit),
+              iconSize: 30.0,
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (_) {
                   return AddGoalPage();
                 }));
               }
             ),
-            SizedBox(width: 25),
             RaisedButton(
               color: Colors.white,
               elevation: 7.0,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-              child: Text('목표 삭제하기', style: TextStyle(fontSize: 15, color: mint)),
+              child: Text('후원 매칭하기', style: TextStyle(fontSize: 15, color: mint)),
               onPressed: () {
                 showDialog(context: context, builder: (context) {
                   return AlertDialog(
-                    content: Text('목표를 삭제하시겠습니까?'),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text('취소', style: TextStyle(color: mint),),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      FlatButton(
-                        child: Text('확인', style: TextStyle(color: mint),),
-                        onPressed: () {
-                          setState(() {
-                            dbRef.remove();
-                            goal.title=null;
-                          });
-                          Navigator.pop(context);
-                        },
-                      )
-                    ],
-                  );
-                });
-              }
-            ),
-            SizedBox(width: 25),
-            RaisedButton(
-              color: Colors.white,
-              elevation: 7.0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-              child: Text('결제', style: TextStyle(fontSize: 15, color: mint)),
-              onPressed: () {
-                showDialog(context: context, builder: (context) {
-                  return AlertDialog(
-                    content: Text('목표를 결제하시겠습니까?'),
+                    content: Text('매칭을 시작하시겠습니까?'),
                     actions: <Widget>[
                       FlatButton(
                         child: Text('취소', style: TextStyle(color: mint),),
@@ -152,6 +165,36 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                               'start_date': goal.startDate,
                               'current_money': 0,
                             });
+                          });
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  );
+                });
+              }
+            ),
+            IconButton(
+              color: brown,
+              icon: Icon(Icons.delete),
+              iconSize: 30.0,
+              onPressed: () {
+                showDialog(context: context, builder: (context) {
+                  return AlertDialog(
+                    content: Text('목표를 삭제하시겠습니까?'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('취소', style: TextStyle(color: mint),),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('확인', style: TextStyle(color: mint),),
+                        onPressed: () {
+                          setState(() {
+                            dbRef.remove();
+                            goal.title=null;
                           });
                           Navigator.pop(context);
                         },

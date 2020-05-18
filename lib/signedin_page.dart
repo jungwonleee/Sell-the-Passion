@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sell_the_passion/goal_management_page.dart';
+import 'sponsorship_management_page.dart';
+import 'notification_page.dart';
 import 'package:sell_the_passion/my_page.dart';
 import 'package:sell_the_passion/photo_uploader.dart';
 import 'firebase_provider.dart';
@@ -41,9 +43,9 @@ class SignedInPageState extends State<SignedInPage> {
 
     List<Widget> _screens = <Widget>[
       GoalManagementPage(),
-      Container(color: Colors.green),
+      SponsorshipManagementPage(),
       Container(color: Colors.blue),
-      Container(color: Colors.cyan),
+      NotificationPage(),
       MyPage()
     ];
 
