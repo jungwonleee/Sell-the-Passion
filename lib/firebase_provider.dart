@@ -11,7 +11,6 @@ class FirebaseProvider with ChangeNotifier {
   FirebaseUser _user;
 
   FirebaseProvider() {
-    logger.d("init FirebaseProvider");
     _prepareUser();
   }
 

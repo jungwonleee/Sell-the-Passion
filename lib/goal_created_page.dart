@@ -1,7 +1,6 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'goal_provider.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 
 
@@ -28,9 +27,8 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
     Color mint = Theme.of(context).primaryColor;
     Color brown = Theme.of(context).accentColor;
 
-    DateFormat dateFormat = DateFormat("yyyy-MM-dd");
     DateTime now = new DateTime.now();
-    DateTime startDate = dateFormat.parse(goal.startDate);
+    DateTime startDate = goal.startDate;
     DateTime endDate = startDate.add(Duration(days: (goal.period+1)*7-1));
     int daysDiff = now.difference(startDate).inDays;
     List<String> days = ['일', '월', '화', '수', '목', '금', '토'];
@@ -161,10 +159,13 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                     ],
                   ),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text('인증방법', style: apple),
                       SizedBox(width: 10.0),
-                      Text(goal.authMethod, style: apple)
+                      Flexible(
+                        child: Text(goal.authMethod, style: apple, softWrap: true) ,
+                      )
                     ],
                   )
                 ]
@@ -198,14 +199,33 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
           itemBuilder: (context, index) {
             int i = week;
             int j = index;
-
-            DateFormat dateFormat = DateFormat("yyyy-MM-dd");
-            int startDay = dateFormat.parse(goal.startDate).weekday;
+            int startDay = 0;
+            if (goal.startDate!=null) {
+              startDay = goal.startDate.weekday;
+            }
             var day = days[(index+startDay)%7];
 
             int imgIdx = i * 7 + j;
             if (goal.authImage["0$imgIdx"] != "" && goal.authImage["0$imgIdx"] != null) {
-              return Image.network(goal.authImage["0$imgIdx"]);
+              return new Container(
+                margin: EdgeInsets.symmetric(horizontal: 4.0),
+                width:120.0,
+                height:120.0,
+                child: new Image.network(
+                  goal.authImage["0$imgIdx"], 
+                  fit: BoxFit.fill,
+                  loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null ? 
+                            loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                            : null,
+                      ),
+                    );
+                  }
+                ),
+              );
             }
 
             if (goal.authDay[(j+startDay)%7]) {
