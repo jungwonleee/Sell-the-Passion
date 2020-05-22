@@ -30,13 +30,13 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
     for (int i=0; i<7; i++) {
       if (authDay[i]==true) {
         switch(i) {
-          case 0: s+="월 "; break;
-          case 1: s+="화 "; break;
-          case 2: s+="수 "; break;
-          case 3: s+="목 "; break;
-          case 4: s+="금 "; break;
-          case 5: s+="토 "; break;
-          case 6: s+="일 "; break;
+          case 1: s+="월 "; break;
+          case 2: s+="화 "; break;
+          case 3: s+="수 "; break;
+          case 4: s+="목 "; break;
+          case 5: s+="금 "; break;
+          case 6: s+="토 "; break;
+          case 0: s+="일 "; break;
         }
       }
     }
