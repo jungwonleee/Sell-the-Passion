@@ -225,6 +225,13 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
         goal.authDay = List<bool>.from(map["auth_day"]);
         goal.category = map["category"];
         goal.isPaid = map["is_paid"];
+      } else {
+        goal.title = null;
+        goal.period = null;
+        goal.authMethod = null;
+        goal.authDay = [false, false, false, false, false, false, false];
+        goal.category = null;
+        goal.isPaid = false;
       }
       if (goal.isPaid) {
         if (map["auth_image"] != null)
@@ -247,6 +254,13 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
             goal.authDay = List<bool>.from(map["auth_day"]);
             goal.category = map["category"];
             goal.isPaid = map["is_paid"];
+          } else {
+            goal.title = null;
+            goal.period = null;
+            goal.authMethod = null;
+            goal.authDay = [false, false, false, false, false, false, false];
+            goal.category = null;
+            goal.isPaid = false;
           }
 
           if (goal.isPaid) {
@@ -256,6 +270,14 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
             goal.currentMoney = map["current_money"];
             return GoalCreatedPage();
           }
+
+          goal.title = null;
+          goal.period = null;
+          goal.authMethod = null;
+          goal.authDay = [false, false, false, false, false, false, false];
+          goal.category = null;
+          goal.isPaid = false;
+
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
