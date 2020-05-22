@@ -17,7 +17,8 @@ class _SponsorshipManagementPageState extends State<SponsorshipManagementPage> {
     DatabaseReference tmpRef = FirebaseDatabase.instance.reference().child('${fp.getUser().uid}').child("slave");
     
     tmpRef.once().then((DataSnapshot snapshot) {
-      slave = snapshot.value as String; 
+      slave = snapshot.value as String;
+      return slave; 
     }).then((value) {
       print(slave);
       DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('$slave').child("goal");
@@ -35,8 +36,28 @@ class _SponsorshipManagementPageState extends State<SponsorshipManagementPage> {
 
     
 
-    return Center(
-      child: Text('$title', style: TextStyle(fontSize: 20)),
+    return FutureBuilder(
+      future: tmpRef.once(),
+      builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
+        if (snapshot.hasData) {
+          slave = snapshot.data.value as String;
+          DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('$slave').child("goal");
+          return FutureBuilder(
+            future: dbRef.once(),
+            builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
+              if (snapshot.hasData) {
+                Map map = snapshot.data.value as Map<dynamic, dynamic>;
+                title = map["title"];
+                return Center(
+                  child: Text('$title', style: TextStyle(fontSize: 20)),
+                ); 
+              }
+              return SizedBox(height: 0);
+            },
+          );
+        }
+        return Center( child: CircularProgressIndicator() );
+      },
     );
   }
 }
