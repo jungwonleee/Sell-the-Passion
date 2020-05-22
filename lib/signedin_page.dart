@@ -34,20 +34,21 @@ class SignedInPageState extends State<SignedInPage> {
     });
   }
 
+  List<String> appBarTitle = ['목표관리','후원관리','','알림','마이페이지'];
+
+  List<Widget> _screens = <Widget>[
+    GoalManagementPage(),
+    SponsorshipManagementPage(),
+    Container(color: Colors.blue),
+    NotificationPage(),
+    MyPage()
+  ];
+
   @override
   Widget build(BuildContext context) {
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
     Goal goal = Provider.of<Goal>(context);
     DateTime now = new DateTime.now();
-    List<String> appBarTitle = ['목표관리','후원관리','','알림','마이페이지'];
-
-    List<Widget> _screens = <Widget>[
-      GoalManagementPage(),
-      SponsorshipManagementPage(),
-      Container(color: Colors.blue),
-      NotificationPage(),
-      MyPage()
-    ];
 
     return Scaffold(
       appBar: AppBar(
