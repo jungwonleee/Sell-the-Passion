@@ -197,11 +197,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                           goal.isPaid = true;
                           goal.startDate = DateTime.now();
                           setState(() {
-                            dbRef.update({
-                              'is_paid': true,
-                              'start_date': DateFormat('yyyy-MM-dd').format(goal.startDate),
-                              'current_money': 0,
-                            });
+                            dbRef.remove();
                           });
                           Navigator.pop(context);
                         },
