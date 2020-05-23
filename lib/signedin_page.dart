@@ -53,7 +53,7 @@ class SignedInPageState extends State<SignedInPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(appBarTitle[_selectedIndex], style: applesb),
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: _selectedIndex == 1 ? Theme.of(context).accentColor : Theme.of(context).primaryColor,
         actions: _selectedIndex == 4 ? <Widget>[
           FlatButton(
             child: Text('로그아웃', style: TextStyle(

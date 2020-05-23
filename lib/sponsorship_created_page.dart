@@ -58,26 +58,26 @@ class _SponsorshipCreatedPageState extends State<SponsorshipCreatedPage> {
                     margin: const EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 0.0),
                     padding: const EdgeInsets.fromLTRB(7.0, 0.0, 7.0, 1.0),
                     decoration: BoxDecoration(
-                      border: Border.all(color: brown, width: 1.5),
+                      border: Border.all(color: mint, width: 1.5),
                       borderRadius: BorderRadius.all(
                         Radius.circular(5.0)
                       )
                     ),
                     child: Text('${categorystring[goal.category]}', style: TextStyle(
-                        color: brown, fontSize: 15.0, fontFamily: 'Apple Semibold')
+                        color: mint, fontSize: 15.0, fontFamily: 'Apple Semibold')
                     ),
                   ),
                   Container(
                     margin: const EdgeInsets.fromLTRB(12.0, 4.0, 0.0, 0.0),
                     padding: const EdgeInsets.fromLTRB(7.0, 0.0, 7.0, 1.0),
                     decoration: BoxDecoration(
-                      border: Border.all(color: brown, width: 1.5),
+                      border: Border.all(color: mint, width: 1.5),
                       borderRadius: BorderRadius.all(
                         Radius.circular(5.0)
                       )
                     ),
                     child: Text('${goal.period+1}주', style: TextStyle(
-                        color: brown, fontSize: 15.0, fontFamily: 'Apple Semibold')
+                        color: mint, fontSize: 15.0, fontFamily: 'Apple Semibold')
                     ),
                   )
                 ],
@@ -90,13 +90,13 @@ class _SponsorshipCreatedPageState extends State<SponsorshipCreatedPage> {
                     margin: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
                     padding: const EdgeInsets.fromLTRB(7.0, 0.0, 7.0, 0.0),
                     decoration: BoxDecoration(
-                      border: Border.all(color: mint, width: 2.5),
+                      border: Border.all(color: brown, width: 2.5),
                       borderRadius: BorderRadius.all(
                         Radius.circular(10.0)
                       )
                     ),
                     child: Text('Day ${daysDiff+1}', style: TextStyle(
-                        color: mint, fontSize: 40.0, fontFamily: 'Apple Semibold')
+                        color: brown, fontSize: 40.0, fontFamily: 'Apple Semibold')
                     ),
                   ),
                   Container(
@@ -117,7 +117,7 @@ class _SponsorshipCreatedPageState extends State<SponsorshipCreatedPage> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
                             Text('${moneyString(goal.currentMoney)}원', style: TextStyle(
-                              fontFamily: 'Apple Semibold', fontSize: 25.0, color: mint
+                              fontFamily: 'Apple Semibold', fontSize: 25.0, color: brown
                             ),),
                             Text('${moneyString((goal.period+1)*4200)}원', style: TextStyle(
                               fontFamily: 'Apple Semibold', fontSize: 25.0
@@ -167,7 +167,7 @@ class _SponsorshipCreatedPageState extends State<SponsorshipCreatedPage> {
     }
 
     Widget weekText(int num, String date) {
-      TextStyle title = TextStyle(color: mint, fontFamily: 'Apple Semibold', fontSize: 28.0);
+      TextStyle title = TextStyle(color: brown, fontFamily: 'Apple Semibold', fontSize: 28.0);
       TextStyle body = TextStyle(color: Colors.black, fontFamily: 'Apple Semibold', fontSize: 15.0);
 
       return RichText(
