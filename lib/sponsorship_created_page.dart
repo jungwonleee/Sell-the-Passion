@@ -1,28 +1,20 @@
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'goal_provider.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 
-
-GoalCreatedPageState pageState;
-
-class GoalCreatedPage extends StatefulWidget {
-
+class SponsorshipCreatedPage extends StatefulWidget {
   @override
-  GoalCreatedPageState createState() {
-    pageState = GoalCreatedPageState();
-    return pageState;
-  }
+  _SponsorshipCreatedPageState createState() => _SponsorshipCreatedPageState();
 }
 
-class GoalCreatedPageState extends State<GoalCreatedPage> {
-  TextStyle apple = TextStyle(fontSize: 15.0, fontFamily: 'Apple Semibold');
-  List<String> categorystring = ['건강', '학습', '취미'];
-
+class _SponsorshipCreatedPageState extends State<SponsorshipCreatedPage> {
   @override
   Widget build(BuildContext context) {
-
-    Goal goal = Provider.of(context);
+    SlaveGoal goal = Provider.of<SlaveGoal>(context);
+    
+    TextStyle apple = TextStyle(fontSize: 15.0, fontFamily: 'Apple Semibold');
+  List<String> categorystring = ['건강', '학습', '취미'];
 
     Color mint = Theme.of(context).primaryColor;
     Color brown = Theme.of(context).accentColor;
@@ -35,9 +27,9 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
 
     String authDayString(List<bool> authDay) {
       String s='';
-      for (int i=1; i<=7; i++) {
-        if (authDay[i%7]) {
-          s+=days[i%7];
+      for (int i=0; i<7; i++) {
+        if (authDay[i]) {
+          s+=days[i];
           s+=' ';
         }
       }
@@ -115,9 +107,9 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
                             SizedBox(height: 2.0),
-                            Text('확보한 금액', style: apple),
+                            Text('상대가 확보한 금액', style: apple),
                             SizedBox(height: 13.0),
-                            Text('후원받은 금액', style: apple),
+                            Text('내가 후원한 금액', style: apple),
                           ],
                         ),
                         SizedBox(width: 10.0),
@@ -248,6 +240,7 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
       String s='${weekStart.month}월 ${weekStart.day}일 ~ ${weekEnd.month}월 ${weekEnd.day}일';
       return s;
     }
+
     ListView goalRows = ListView.builder(
       scrollDirection: Axis.vertical,
       itemCount: goal.period+1,

@@ -16,7 +16,7 @@ class _NotificationPageState extends State<NotificationPage> {
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
     DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('${fp.getUser().uid}').child("notification");
 
-    Color mint = Theme.of(context).primaryColor;
+    //Color mint = Theme.of(context).primaryColor;
     Color brown = Theme.of(context).accentColor;
 
     return FutureBuilder(
@@ -29,7 +29,7 @@ class _NotificationPageState extends State<NotificationPage> {
         return ListView.builder(
           itemCount: notifications.length,
           itemBuilder: (context, index) {
-            int type = notifications[index]["type"] as int;
+            //int type = notifications[index]["type"] as int;
             String text = notifications[index]["text"] as String;
             return Card(
               child: ListTile(
