@@ -21,7 +21,6 @@ class _SponsorshipManagementPageState extends State<SponsorshipManagementPage> {
     tmpRef.once().then((DataSnapshot snapshot) {
       slave = snapshot.value as String;
     }).then((value) {
-      print(slave);
       DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('$slave').child("goal");
       dbRef.once().then((DataSnapshot snapshot){
         Map<dynamic, dynamic> map = snapshot.value as Map;

@@ -50,129 +50,127 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
     }
 
     Widget goalInfo() {
-      return Container(
-        decoration:  BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-          color: Colors.white
-        ),
-        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-        child: Column(
-          children: <Widget>[
-            Text(goal.title, style: TextStyle(
-              fontFamily: 'Apple Semibold',
-              fontSize: 28,
-            ), softWrap: true),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 0.0),
-                  padding: const EdgeInsets.fromLTRB(7.0, 0.0, 7.0, 1.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: brown, width: 1.5),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5.0)
-                    )
-                  ),
-                  child: Text('${categorystring[goal.category]}', style: TextStyle(
-                      color: brown, fontSize: 15.0, fontFamily: 'Apple Semibold')
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.fromLTRB(12.0, 4.0, 0.0, 0.0),
-                  padding: const EdgeInsets.fromLTRB(7.0, 0.0, 7.0, 1.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: brown, width: 1.5),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5.0)
-                    )
-                  ),
-                  child: Text('${goal.period+1}주', style: TextStyle(
-                      color: brown, fontSize: 15.0, fontFamily: 'Apple Semibold')
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                  padding: const EdgeInsets.fromLTRB(7.0, 0.0, 7.0, 0.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: mint, width: 2.5),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0)
-                    )
-                  ),
-                  child: Text('Day ${daysDiff+1}', style: TextStyle(
-                      color: mint, fontSize: 40.0, fontFamily: 'Apple Semibold')
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 0.0),
-                  child: Row(
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          SizedBox(height: 2.0),
-                          Text('확보한 금액', style: apple),
-                          SizedBox(height: 13.0),
-                          Text('후원받은 금액', style: apple),
-                        ],
-                      ),
-                      SizedBox(width: 10.0),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Text('${moneyString(goal.currentMoney)}원', style: TextStyle(
-                            fontFamily: 'Apple Semibold', fontSize: 25.0, color: mint
-                          ),),
-                          Text('${moneyString((goal.period+1)*4200)}원', style: TextStyle(
-                            fontFamily: 'Apple Semibold', fontSize: 25.0
-                          ),),
-                        ],
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 10.0),
-              child: Column(
+      return Card (
+        child: Container(
+          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+          child: Column(
+            children: <Widget>[
+              Text(goal.title, style: TextStyle(
+                fontFamily: 'Apple Semibold',
+                fontSize: 28,
+              ), softWrap: true),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Text('목표기간', style: apple),
-                      SizedBox(width: 10.0),
-                      Text('${startDate.year}년 ${startDate.month}월 ${startDate.day}일 ~ ${endDate.year}년 ${endDate.month}월 ${endDate.day}일', style: apple)
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text('인증요일', style: apple),
-                      SizedBox(width: 10.0),
-                      Text('${authDayString(goal.authDay)}', style: apple)
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('인증방법', style: apple),
-                      SizedBox(width: 10.0),
-                      Flexible(
-                        child: Text(goal.authMethod, style: apple, softWrap: true) ,
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 0.0),
+                    padding: const EdgeInsets.fromLTRB(7.0, 0.0, 7.0, 1.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: brown, width: 1.5),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(5.0)
                       )
-                    ],
+                    ),
+                    child: Text('${categorystring[goal.category]}', style: TextStyle(
+                        color: brown, fontSize: 15.0, fontFamily: 'Apple Semibold')
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(12.0, 4.0, 0.0, 0.0),
+                    padding: const EdgeInsets.fromLTRB(7.0, 0.0, 7.0, 1.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: brown, width: 1.5),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(5.0)
+                      )
+                    ),
+                    child: Text('${goal.period+1}주', style: TextStyle(
+                        color: brown, fontSize: 15.0, fontFamily: 'Apple Semibold')
+                    ),
                   )
-                ]
+                ],
               ),
-            )
-          ],
-        ),
+              SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                    padding: const EdgeInsets.fromLTRB(7.0, 0.0, 7.0, 0.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: mint, width: 2.5),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0)
+                      )
+                    ),
+                    child: Text('Day ${daysDiff+1}', style: TextStyle(
+                        color: mint, fontSize: 40.0, fontFamily: 'Apple Semibold')
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 0.0),
+                    child: Row(
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            SizedBox(height: 2.0),
+                            Text('확보한 금액', style: apple),
+                            SizedBox(height: 13.0),
+                            Text('후원받은 금액', style: apple),
+                          ],
+                        ),
+                        SizedBox(width: 10.0),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            Text('${moneyString(goal.currentMoney)}원', style: TextStyle(
+                              fontFamily: 'Apple Semibold', fontSize: 25.0, color: mint
+                            ),),
+                            Text('${moneyString((goal.period+1)*4200)}원', style: TextStyle(
+                              fontFamily: 'Apple Semibold', fontSize: 25.0
+                            ),),
+                          ],
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 10.0),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Text('목표기간', style: apple),
+                        SizedBox(width: 10.0),
+                        Text('${startDate.year}년 ${startDate.month}월 ${startDate.day}일 ~ ${endDate.year}년 ${endDate.month}월 ${endDate.day}일', style: apple)
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Text('인증요일', style: apple),
+                        SizedBox(width: 10.0),
+                        Text('${authDayString(goal.authDay)}', style: apple)
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('인증방법', style: apple),
+                        SizedBox(width: 10.0),
+                        Flexible(
+                          child: Text(goal.authMethod, style: apple, softWrap: true) ,
+                        )
+                      ],
+                    )
+                  ]
+                ),
+              )
+            ],
+          ),
+        )
       );
     }
 
@@ -278,15 +276,12 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             goalInfo(),
-            SizedBox(height: 10),
             Expanded(
-              child: Container(
-                decoration:  BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  color: Colors.white
-                ),
-                padding: EdgeInsets.fromLTRB(10.0, 10, 10.0, 5.0),
-                child: goalRows,
+              child: Card (
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(10.0, 10, 10.0, 5.0),
+                  child: goalRows,
+                )
               )
             ),
           ],
