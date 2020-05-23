@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:sell_the_passion/firebase_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:sell_the_passion/goal_provider.dart';
 
 class SponsorshipManagementPage extends StatefulWidget {
   @override
@@ -14,11 +15,11 @@ class _SponsorshipManagementPageState extends State<SponsorshipManagementPage> {
   @override
   Widget build(BuildContext context) {
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
+    SlaveGoal goal = Provider.of<SlaveGoal>(context);
     DatabaseReference tmpRef = FirebaseDatabase.instance.reference().child('${fp.getUser().uid}').child("slave");
     
     tmpRef.once().then((DataSnapshot snapshot) {
       slave = snapshot.value as String;
-      return slave; 
     }).then((value) {
       print(slave);
       DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('$slave').child("goal");
