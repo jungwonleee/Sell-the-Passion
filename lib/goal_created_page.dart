@@ -219,7 +219,7 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                     tag: goal.authImage["0$imgIdx"],
                     child: new Image.network(
                       goal.authImage["0$imgIdx"], 
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                       loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
                         if (loadingProgress == null) return child;
                         return Center(

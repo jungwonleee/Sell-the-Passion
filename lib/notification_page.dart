@@ -3,6 +3,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:sell_the_passion/firebase_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'validate_page.dart';
+
 class NotificationPage extends StatefulWidget {
   @override
   _NotificationPageState createState() => _NotificationPageState();
@@ -36,6 +38,8 @@ class _NotificationPageState extends State<NotificationPage> {
                 leading: type==0? Icon(Icons.camera_alt, size : 50.0, color: brown) : Icon(Icons.playlist_add_check, size : 50.0, color: brown), 
                 title: type==0 ? Text('인증') : Text('주간평가'),
                 subtitle: Text(text),
+                onTap: () {
+                }
               ),
             );
           }
