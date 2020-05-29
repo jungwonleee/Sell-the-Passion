@@ -207,26 +207,6 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
             int imgIdx = i * 7 + j;
             DateTime imageDate = startDate.add(Duration(days: imgIdx)); 
             if (goal.authImage["0$imgIdx"] != "" && goal.authImage["0$imgIdx"] != null) {
-<<<<<<< HEAD
-              return new Container(
-                margin: EdgeInsets.symmetric(horizontal: 4.0),
-                width:120.0,
-                height:120.0,
-                child: new Image.network(
-                  goal.authImage["0$imgIdx"], 
-                  fit: BoxFit.cover,
-                  loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null ? 
-                            loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
-                            : null,
-                      ),
-                    );
-                  }
-                ),
-=======
               return GestureDetector(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ImageDetailPage(goal.authImage["0$imgIdx"], imageDate)));
@@ -239,7 +219,7 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                     tag: goal.authImage["0$imgIdx"],
                     child: new Image.network(
                       goal.authImage["0$imgIdx"], 
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                       loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
                         if (loadingProgress == null) return child;
                         return Center(
@@ -253,7 +233,6 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                     ),
                   )
                 )
->>>>>>> e6058b5aa84a518cd39853ea81345d7522770d50
               );
             }
 

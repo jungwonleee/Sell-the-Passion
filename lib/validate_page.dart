@@ -28,7 +28,7 @@ class ValidatePageState extends State<ValidatePage> with TickerProviderStateMixi
 
   List selectedData = [];
   void initState() {
-    images = widget.images.reversed.toList();
+    images = widget.images;
     super.initState();
 
     _buttonController = new AnimationController(
@@ -146,7 +146,7 @@ class ValidatePageState extends State<ValidatePage> with TickerProviderStateMixi
               children: images.asMap().entries.map((entry) {
                 int index = entry.key;
                 Image item = entry.value;
-                if (index == dataLength - 1) {
+                if (true) {
                   return validateCard(
                     item,
                     bottom.value,

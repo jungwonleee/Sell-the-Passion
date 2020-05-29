@@ -280,7 +280,7 @@ class _SponsorshipCreatedPageState extends State<SponsorshipCreatedPage> {
                     child: Text("평가하기"), 
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(builder: (_) {
-                        return ValidatePage(images);
+                        return ValidatePage(images.reversed.toList());
                       }));
                     }
                   ),
