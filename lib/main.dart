@@ -12,12 +12,14 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<FirebaseProvider>(
-            create: (_) => FirebaseProvider()),
+          create: (_) => FirebaseProvider()),
         ChangeNotifierProvider<Goal>(
           create: (_) => Goal()),
+        ChangeNotifierProvider<SlaveGoal>(
+          create: (_) => SlaveGoal()),
       ],
       child: MaterialApp(
-        title: "Sell_The_Passion",
+        title: "Sell the Passion",
         theme: ThemeData(
           brightness: Brightness.light,
           primaryColor: Color(0xFF66A091),

@@ -18,7 +18,7 @@ class _NotificationPageState extends State<NotificationPage> {
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
     DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('${fp.getUser().uid}').child("notification");
 
-    Color mint = Theme.of(context).primaryColor;
+    //Color mint = Theme.of(context).primaryColor;
     Color brown = Theme.of(context).accentColor;
 
     return FutureBuilder(
@@ -35,8 +35,8 @@ class _NotificationPageState extends State<NotificationPage> {
             String text = notifications[index]["text"] as String;
             return Card(
               child: ListTile(
-                leading: Icon(Icons.camera_alt, size : 50.0, color: brown),
-                title: Text(text),
+                leading: type==0? Icon(Icons.camera_alt, size : 50.0, color: brown) : Icon(Icons.playlist_add_check, size : 50.0, color: brown), 
+                title: type==0 ? Text('인증') : Text('주간평가'),
                 subtitle: Text(text),
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {

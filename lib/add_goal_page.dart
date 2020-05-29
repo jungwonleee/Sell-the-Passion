@@ -42,7 +42,6 @@ class _AddGoalPageState extends State<AddGoalPage> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        backgroundColor: Theme.of(context).accentColor,
         title: Text('목표 세우기'),
         actions: <Widget>[
           FlatButton(

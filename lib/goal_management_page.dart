@@ -27,9 +27,9 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
 
   String authDayString(List<bool> authDay) {
     String s="";
-    for (int i=0; i<7; i++) {
-      if (authDay[i]==true) {
-        switch(i) {
+    for (int i=1; i<=7; i++) {
+      if (authDay[i%7]==true) {
+        switch(i%7) {
           case 1: s+="월 "; break;
           case 2: s+="화 "; break;
           case 3: s+="수 "; break;
@@ -266,13 +266,6 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
             goal.currentMoney = map["current_money"];
             return GoalCreatedPage();
           }
-
-          goal.title = null;
-          goal.period = null;
-          goal.authMethod = null;
-          goal.authDay = [false, false, false, false, false, false, false];
-          goal.category = null;
-          goal.isPaid = false;
 
           return Center(
             child: Column(
