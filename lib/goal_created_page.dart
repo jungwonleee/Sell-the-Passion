@@ -2,6 +2,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'goal_provider.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+import 'imgae_detail_page.dart';
 
 
 GoalCreatedPageState pageState;
@@ -204,7 +205,9 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
             var day = days[(index+startDay)%7];
 
             int imgIdx = i * 7 + j;
+            DateTime imageDate = startDate.add(Duration(days: imgIdx)); 
             if (goal.authImage["0$imgIdx"] != "" && goal.authImage["0$imgIdx"] != null) {
+<<<<<<< HEAD
               return new Container(
                 margin: EdgeInsets.symmetric(horizontal: 4.0),
                 width:120.0,
@@ -223,6 +226,34 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                     );
                   }
                 ),
+=======
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ImageDetailPage(goal.authImage["0$imgIdx"], imageDate)));
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 4.0),
+                  width:120.0,
+                  height:120.0,
+                  child: Hero(
+                    tag: goal.authImage["0$imgIdx"],
+                    child: new Image.network(
+                      goal.authImage["0$imgIdx"], 
+                      fit: BoxFit.fill,
+                      loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null ? 
+                                loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                                : null,
+                          ),
+                        );
+                      }
+                    ),
+                  )
+                )
+>>>>>>> e6058b5aa84a518cd39853ea81345d7522770d50
               );
             }
 
