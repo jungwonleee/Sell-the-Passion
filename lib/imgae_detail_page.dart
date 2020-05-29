@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ImageDetailPage extends StatefulWidget {
   final String image;
@@ -24,13 +25,19 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       backgroundColor: Colors.black,
-      appBar: AppBar(title: Text('${imageDate.year}년 ${imageDate.month}월 ${imageDate.day}일 ${weekDay[imageDate.weekday%7]}요일'), backgroundColor: Colors.black),
+      appBar: AppBar(title: Text('${imageDate.year}년 ${imageDate.month}월 ${imageDate.day}일 ${weekDay[imageDate.weekday%7]}요일'), backgroundColor: Colors.transparent),
       body: Center(
-        child: Hero(
-          child: Image.network(image),
-          transitionOnUserGestures: true,
-          tag: image,
+        child:PhotoView(
+          imageProvider: NetworkImage(image),
+          minScale: PhotoViewComputedScale.contained,
+          maxScale: PhotoViewComputedScale.covered * 5,
+          initialScale: PhotoViewComputedScale.contained,
+          heroAttributes: PhotoViewHeroAttributes(
+            tag: image,
+            transitionOnUserGestures: true
+          ),
         ),
       ),
     );
