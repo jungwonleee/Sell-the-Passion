@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
           create: (_) => SlaveGoal()),
       ],
       child: MaterialApp(
-        title: "Sell_The_Passion",
+        title: "Sell the Passion",
         theme: ThemeData(
           brightness: Brightness.light,
           primaryColor: Color(0xFF66A091),

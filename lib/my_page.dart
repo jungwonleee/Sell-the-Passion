@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sell_the_passion/add_goal_page.dart';
 import 'firebase_provider.dart';
 
 MyPageState pageState;
@@ -28,7 +29,7 @@ class MyPageState extends State<MyPage> {
           child: Column(
             children: <Widget>[
               CircleAvatar(radius: 50,backgroundImage: NetworkImage(fp.getUser().photoUrl)),
-              Text(fp.getUser().displayName, style: TextStyle(fontSize: 28), softWrap: true),
+              Text(/*fp.getUser().displayName*/'Sundar Pichai', style: TextStyle(fontSize: 28), softWrap: true),
               SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -37,7 +38,7 @@ class MyPageState extends State<MyPage> {
                     child:Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text('10', style: TextStyle(fontSize: 30)),
+                        Text('2', style: TextStyle(fontSize: 30)),
                         SizedBox(height: 5.0),
                         Text('세운 목표 수', style: TextStyle(fontSize: 15)),
                       ],
@@ -47,7 +48,7 @@ class MyPageState extends State<MyPage> {
                     child:Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text('5', style: TextStyle(fontSize: 30)),
+                        Text('0', style: TextStyle(fontSize: 30)),
                         SizedBox(height: 5.0),
                         Text('성공한 목표 수', style: TextStyle(fontSize: 15)),
                       ],
@@ -57,7 +58,7 @@ class MyPageState extends State<MyPage> {
                     child:Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text('3,000원', style: TextStyle(fontSize: 30)),
+                        Text('3,000원', style: TextStyle(fontSize: 30, color: mint)),
                         SizedBox(height: 5.0),
                         Text('미환급 금액', style: TextStyle(fontSize: 15)),
                       ],
@@ -140,7 +141,7 @@ class MyPageState extends State<MyPage> {
 
     ListView historyRows = ListView.builder(
       scrollDirection: Axis.vertical,
-      itemCount: 5,
+      itemCount: 1,
       itemBuilder: (context, index) {
         return Container(
           child: Column(

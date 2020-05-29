@@ -55,6 +55,7 @@ class FirebaseProvider with ChangeNotifier {
 
   signOut() async {
     await fAuth.signOut();
+    await _googleSignIn.signOut();
     setUser(null);
   }
   

@@ -71,11 +71,11 @@ class SignedInPageState extends State<SignedInPage> {
         width: 70.0,
         child: FloatingActionButton(
           onPressed: () async {
-            if (goal == null || goal.startDate == null) {
+            if (goal == null || goal.startDate == null || goal.isPaid == false) {
               showDialog(context: context, builder: (context) {
                 return AlertDialog(
                   title: Text('오류'),
-                  content: Text('목표를 먼저 등록해주세요.'),
+                  content: Text('인증 기능은 매칭 이후에 사용하실 수 있습니다.'),
                   actions: <Widget>[
                     FlatButton(
                       child: Text('확인', style: TextStyle(color: mint),),

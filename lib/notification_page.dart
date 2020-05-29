@@ -29,12 +29,12 @@ class _NotificationPageState extends State<NotificationPage> {
         return ListView.builder(
           itemCount: notifications.length,
           itemBuilder: (context, index) {
-            //int type = notifications[index]["type"] as int;
+            int type = notifications[index]["type"] as int;
             String text = notifications[index]["text"] as String;
             return Card(
               child: ListTile(
-                leading: Icon(Icons.camera_alt, size : 50.0, color: brown),
-                title: Text(text),
+                leading: type==0? Icon(Icons.camera_alt, size : 50.0, color: brown) : Icon(Icons.playlist_add_check, size : 50.0, color: brown), 
+                title: type==0 ? Text('인증') : Text('주간평가'),
                 subtitle: Text(text),
               ),
             );

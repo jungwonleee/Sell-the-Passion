@@ -267,13 +267,6 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
             return GoalCreatedPage();
           }
 
-          goal.title = null;
-          goal.period = null;
-          goal.authMethod = null;
-          goal.authDay = [false, false, false, false, false, false, false];
-          goal.category = null;
-          goal.isPaid = false;
-
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

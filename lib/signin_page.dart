@@ -36,7 +36,8 @@ class SignInPageState extends State<SignInPage> {
       color: Theme.of(context).accentColor,
     );
 
-    TextStyle dot = TextStyle(
+    TextStyle title2 = TextStyle(
+      fontFamily: 'Apple Semibold',
       fontSize: 80.0,
       color: Theme.of(context).primaryColor,
       fontWeight: FontWeight.bold
@@ -48,7 +49,7 @@ class SignInPageState extends State<SignInPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            _title(title, dot),
+            _title(title, title2),
             SizedBox(height: 20),
             _signInButton()
           ],
@@ -57,7 +58,7 @@ class SignInPageState extends State<SignInPage> {
     );
   }
 
-  Widget _title(title, dot) {
+  Widget _title(title, title2) {
     return Stack(
       children: <Widget>[
         Container(
@@ -65,13 +66,9 @@ class SignInPageState extends State<SignInPage> {
           child: Text('Sell the', style: title),
         ),
         Container(
-          padding: EdgeInsets.only(top: 65.0),
-          child: Text('Passion', style: title),
+          padding: EdgeInsets.only(top: 75.0),
+          child: Text('Passion', style: title2),
         ),
-        Container(
-          padding: EdgeInsets.fromLTRB(260.0, 76.0, 0.0, 0.0),
-          child: Text('.', style: dot),
-        )
       ],
     );
   }
