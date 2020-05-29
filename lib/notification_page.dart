@@ -39,9 +39,6 @@ class _NotificationPageState extends State<NotificationPage> {
                 title: type==0 ? Text('인증') : Text('주간평가'),
                 subtitle: Text(text),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) {
-                    return ValidatePage();
-                  }));
                 }
               ),
             );

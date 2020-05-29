@@ -10,11 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 
 class ValidatePage extends StatefulWidget {
+  final List<Image> images;
+  ValidatePage(this.images);
+
   @override
   ValidatePageState createState() => new ValidatePageState();
 }
 
 class ValidatePageState extends State<ValidatePage> with TickerProviderStateMixin {
+  List<Image> images;
   AnimationController _buttonController;
   Animation<double> rotate;
   Animation<double> right;
@@ -22,9 +26,9 @@ class ValidatePageState extends State<ValidatePage> with TickerProviderStateMixi
   Animation<double> width;
   int flag = 0;
 
-  List data = [1, 2, 3, 4];
   List selectedData = [];
   void initState() {
+    images = widget.images.reversed.toList();
     super.initState();
 
     _buttonController = new AnimationController(
@@ -42,8 +46,8 @@ class ValidatePageState extends State<ValidatePage> with TickerProviderStateMixi
     rotate.addListener(() {
       setState(() {
         if (rotate.isCompleted) {
-          var i = data.removeLast();
-          data.insert(0, i);
+          var i = images.removeLast();
+          images.insert(0, i);
           _buttonController.reset();
         }
       });
@@ -90,16 +94,16 @@ class ValidatePageState extends State<ValidatePage> with TickerProviderStateMixi
     } on TickerCanceled {}
   }
 
-  dismissImg(int index) {
+  dismissImg(Image img) {
     setState(() {
-      data.removeAt(index);
+      images.remove(img);
     });
   }
 
-  addImg(int index) {
+  addImg(Image img) {
     setState(() {
-      data.removeAt(index);
-      selectedData.add(index);
+      images.remove(img);
+      selectedData.add(img);
     });
   }
 
@@ -125,7 +129,7 @@ class ValidatePageState extends State<ValidatePage> with TickerProviderStateMixi
     Goal goal = Provider.of<Goal>(context);
 
     double initialBottom = 15.0;
-    var dataLength = data.length;
+    var dataLength = images.length;
     double backCardPosition = initialBottom + (dataLength - 1) * 10 + 10;
     double backCardWidth = -10.0;
     return Scaffold(
@@ -139,12 +143,12 @@ class ValidatePageState extends State<ValidatePage> with TickerProviderStateMixi
         child: dataLength > 0
           ? new Stack(
               alignment: AlignmentDirectional.center,
-              children: data.asMap().entries.map((entry) {
+              children: images.asMap().entries.map((entry) {
                 int index = entry.key;
-                int item = entry.value;
-                if (data.indexOf(item) == dataLength - 1) {
-                  return cardDemo(
-                    index,
+                Image item = entry.value;
+                if (index == dataLength - 1) {
+                  return validateCard(
+                    item,
                     bottom.value,
                     right.value,
                     0.0,
@@ -156,16 +160,15 @@ class ValidatePageState extends State<ValidatePage> with TickerProviderStateMixi
                     flag,
                     addImg,
                     swipeRight,
-                    swipeLeft);
+                    swipeLeft
+                  );
                 } else {
                   backCardPosition = backCardPosition - 10;
                   backCardWidth = backCardWidth + 10;
-                  return cardDemoDummy(backCardPosition, 0.0, 0.0,
-                    backCardWidth, 0.0, 0.0, context);
+                  return dummyCard(backCardPosition, 0.0, 0.0, backCardWidth, 0.0, 0.0, context);
                 }
               }).toList())
-          : new Text("No Event Left",
-              style: new TextStyle(color: Colors.white, fontSize: 50.0)),
+          : new Text("평가 완료!", style: new TextStyle(color: Colors.black, fontSize: 30.0)),
       )
     );
   }

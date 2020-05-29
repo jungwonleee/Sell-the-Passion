@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sell_the_passion/validate_page.dart';
 import 'goal_provider.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 
@@ -203,7 +204,7 @@ class _SponsorshipCreatedPageState extends State<SponsorshipCreatedPage> {
                 height:120.0,
                 child: new Image.network(
                   goal.authImage["0$imgIdx"], 
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                   loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
                     if (loadingProgress == null) return child;
                     return Center(
@@ -241,17 +242,50 @@ class _SponsorshipCreatedPageState extends State<SponsorshipCreatedPage> {
       return s;
     }
 
+
     ListView goalRows = ListView.builder(
       scrollDirection: Axis.vertical,
       itemCount: goal.period+1,
-      itemExtent: 180.0,
       itemBuilder: (context, index) {
+        List<Image> images = [];
+        for (int j=0;j<goal.period+1;j++) {
+          int imgIdx = index * 7 + j;
+          if (goal.authImage["0$imgIdx"] != "" && goal.authImage["0$imgIdx"] != null) {
+            images.add(new Image.network(
+              goal.authImage["0$imgIdx"], 
+              fit: BoxFit.cover,
+              loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null ? 
+                        loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                        : null,
+                  ),
+                );
+              }
+            ));
+          } else images.add(null);
+        }
         return Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              weekText(index+1, weekDateString(startDate.add(Duration(days: 7*index)), startDate.add(Duration(days: 7*index+6)))),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  weekText(index+1, weekDateString(startDate.add(Duration(days: 7*index)), startDate.add(Duration(days: 7*index+6)))),
+                  InkWell(
+                    child: Text("평가하기"), 
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) {
+                        return ValidatePage(images);
+                      }));
+                    }
+                  ),
+                ]
+              ),
               SizedBox(height: 8),
               weekImage(index),
               SizedBox(height: 10),
