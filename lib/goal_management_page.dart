@@ -47,6 +47,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
   Widget build(BuildContext context) {
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
     DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/${fp.getUser().uid}');
+    DatabaseReference queueRef = FirebaseDatabase.instance.reference().child('ready_queue');
     Goal goal = Provider.of<Goal>(context);
 
     Color mint = Theme.of(context).primaryColor;
@@ -166,8 +167,9 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                               'current_money': 0,
                             });
                             dbRef.update({
-                              'user_state': 3
+                              'user_state': 2
                             });
+                            queueRef.child('0${goal.category}').child('0${goal.period}').push().set(fp.getUser().uid);
                           });
                           Navigator.pop(context);
                         },
