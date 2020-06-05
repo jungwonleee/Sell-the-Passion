@@ -246,10 +246,8 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
       future: dbRef.once(),
       builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
         if (snapshot.hasData) {
-          //print('hello world');
           Map<dynamic, dynamic> map = snapshot.data.value as Map;
-          //print(map['user_state']);
-          if (map['user_state'] != 0) {
+          if (map != null && map['user_state'] != 0) {
             Map<dynamic, dynamic> map2 = map['goal'] as Map;
             goal.title = map2["title"];
             goal.period = map2["period"];
