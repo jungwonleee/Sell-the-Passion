@@ -29,6 +29,7 @@ class ValidatePageState extends State<ValidatePage> with TickerProviderStateMixi
   List selectedData = [];
   void initState() {
     images = widget.images;
+    print(images);
     super.initState();
 
     _buttonController = new AnimationController(
@@ -96,13 +97,13 @@ class ValidatePageState extends State<ValidatePage> with TickerProviderStateMixi
 
   dismissImg(Image img) {
     setState(() {
-      images.remove(img);
+      images.removeLast();
     });
   }
 
   addImg(Image img) {
     setState(() {
-      images.remove(img);
+      images.removeLast();
       selectedData.add(img);
     });
   }

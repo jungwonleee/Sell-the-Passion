@@ -257,9 +257,14 @@ class _SponsorshipCreatedPageState extends State<SponsorshipCreatedPage> {
       scrollDirection: Axis.vertical,
       itemCount: goal.period+1,
       itemBuilder: (context, index) {
+        int startDay = 0;
+        if (goal.startDate!=null) {
+          startDay = goal.startDate.weekday;
+        }
         List<Image> images = [];
-        for (int j=0;j<goal.period+1;j++) {
+        for (int j=0;j<7;j++) {
           int imgIdx = index * 7 + j;
+          if (!goal.authDay[(j+startDay)%7]) continue;
           if (goal.authImage["0$imgIdx"] != "" && goal.authImage["0$imgIdx"] != null) {
             images.add(new Image.network(
               goal.authImage["0$imgIdx"], 
