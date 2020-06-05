@@ -232,7 +232,8 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
         goal.authDay = [false, false, false, false, false, false, false];
         goal.category = null;
       }
-      if (map['user_state'] == 3) {
+
+      if (map != null && map['user_state'] == 3) {
         Map<dynamic, dynamic> map2 = map['goal'] as Map;
         if (map2['auth_image'] != null)
           goal.authImage = Map<String, String>.from(map2['auth_image']);
@@ -262,7 +263,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
             goal.category = null;
           }
 
-          if (map['user_state'] == 3) {
+          if (map != null && map['user_state'] == 3) {
             Map<dynamic, dynamic> map2 = map['goal'] as Map;
             if (map2['auth_image'] != null)
               goal.authImage = Map<String, String>.from(map2['auth_image']);
