@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 Logger logger = Logger();
 
@@ -46,6 +47,14 @@ class FirebaseProvider with ChangeNotifier {
       final FirebaseUser currentUser = await fAuth.currentUser();
       assert(user.uid == currentUser.uid);
       setUser(user);
+      DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('${currentUser.uid}');
+      if (dbRef.child('user_state') == null) {
+        print(dbRef.child('user_state'));
+        dbRef.update({
+          'user_state': 0
+        });
+      }
+      else print(dbRef);
       return true;
     } on Exception catch (e) {
       logger.e(e.toString());

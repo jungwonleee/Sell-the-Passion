@@ -226,26 +226,6 @@ class _SponsorshipCreatedPageState extends State<SponsorshipCreatedPage> {
                     ),
                   )
                 )
-=======
-              return new Container(
-                margin: EdgeInsets.symmetric(horizontal: 4.0),
-                width:120.0,
-                height:120.0,
-                child: new Image.network(
-                  goal.authImage["0$imgIdx"], 
-                  fit: BoxFit.cover,
-                  loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null ? 
-                            loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
-                            : null,
-                      ),
-                    );
-                  }
-                ),
->>>>>>> dfa8bdd35e1965b464c452542d044bd372cb50fc
               );
             }
 
