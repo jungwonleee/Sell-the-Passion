@@ -200,7 +200,6 @@ class _SponsorshipCreatedPageState extends State<SponsorshipCreatedPage> {
             int imgIdx = i * 7 + j;
             DateTime imageDate = startDate.add(Duration(days: imgIdx)); 
             if (goal.authImage["0$imgIdx"] != "" && goal.authImage["0$imgIdx"] != null) {
-<<<<<<< HEAD
               return GestureDetector(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ImageDetailPage(goal.authImage["0$imgIdx"], imageDate)));
