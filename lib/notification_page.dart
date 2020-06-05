@@ -16,7 +16,7 @@ class _NotificationPageState extends State<NotificationPage> {
   Widget build(BuildContext context) {
 
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
-    DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('${fp.getUser().uid}').child("notification");
+    DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/${fp.getUser().uid}').child("notification");
 
     //Color mint = Theme.of(context).primaryColor;
     Color brown = Theme.of(context).accentColor;

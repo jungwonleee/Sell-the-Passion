@@ -71,7 +71,7 @@ class SignedInPageState extends State<SignedInPage> {
         width: 70.0,
         child: FloatingActionButton(
           onPressed: () async {
-            if (goal == null || goal.startDate == null || goal.isPaid == false) {
+            if (goal == null || goal.startDate == null) {
               showDialog(context: context, builder: (context) {
                 return AlertDialog(
                   title: Text('오류'),

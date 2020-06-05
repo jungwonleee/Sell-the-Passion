@@ -47,14 +47,16 @@ class FirebaseProvider with ChangeNotifier {
       final FirebaseUser currentUser = await fAuth.currentUser();
       assert(user.uid == currentUser.uid);
       setUser(user);
-      DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('${currentUser.uid}');
-      if (dbRef.child('user_state') == null) {
-        print(dbRef.child('user_state'));
-        dbRef.update({
-          'user_state': 0
-        });
-      }
-      else print(dbRef);
+      DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/${currentUser.uid}');
+      await dbRef.child('user_state').once().then((DataSnapshot snapshot){
+        if (snapshot.value == null) {
+          dbRef.update({
+            'user_state': 0
+          });
+          print('user_state created');
+        }
+      });
+      print('hello world');
       return true;
     } on Exception catch (e) {
       logger.e(e.toString());

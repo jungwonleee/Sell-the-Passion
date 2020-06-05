@@ -37,7 +37,7 @@ class _AddGoalPageState extends State<AddGoalPage> {
   Widget build(BuildContext context) {
     Goal goal = Provider.of<Goal>(context);
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
-    DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('${fp.getUser().uid}').child("goal");
+    DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/${fp.getUser().uid}');
 
     return Scaffold(
       backgroundColor: Colors.grey[200],
@@ -55,7 +55,7 @@ class _AddGoalPageState extends State<AddGoalPage> {
                 goal.period = value[1];
                 goal.authDay = authDay;
 
-                dbRef.update({
+                dbRef.child('goal').update({
                   'title': goal.title,
                   'category': goal.category,
                   'auth_method': goal.authMethod,
@@ -63,6 +63,10 @@ class _AddGoalPageState extends State<AddGoalPage> {
                   'auth_day': goal.authDay,
                   'auth_image': goal.authImage,
                   'is_paid': false,
+                });
+
+                dbRef.update({
+                  'user_state': 1
                 });
 
                 Navigator.pop(context);

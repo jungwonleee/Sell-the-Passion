@@ -46,7 +46,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
   @override
   Widget build(BuildContext context) {
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
-    DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('${fp.getUser().uid}').child("goal");
+    DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/${fp.getUser().uid}');
     Goal goal = Provider.of<Goal>(context);
 
     Color mint = Theme.of(context).primaryColor;
@@ -159,13 +159,14 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                       FlatButton(
                         child: Text('확인', style: TextStyle(color: mint),),
                         onPressed: () {
-                          goal.isPaid = true;
                           goal.startDate = DateTime.now();
                           setState(() {
-                            dbRef.update({
-                              'is_paid': true,
+                            dbRef.child('goal').update({
                               'start_date': DateFormat('yyyy-MM-dd').format(goal.startDate),
                               'current_money': 0,
+                            });
+                            dbRef.update({
+                              'user_state': 3
                             });
                           });
                           Navigator.pop(context);
@@ -194,10 +195,11 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                       FlatButton(
                         child: Text('확인', style: TextStyle(color: mint),),
                         onPressed: () {
-                          goal.isPaid = true;
-                          goal.startDate = DateTime.now();
                           setState(() {
-                            dbRef.remove();
+                            dbRef.update({
+                              'user_state': 0
+                            });
+                            dbRef.child('goal').remove();
                           });
                           Navigator.pop(context);
                         },
@@ -214,26 +216,26 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
 
     dbRef.once().then((DataSnapshot snapshot) {
       Map<dynamic, dynamic> map = snapshot.value as Map;
-      if (map != null) {
-        goal.title = map["title"];
-        goal.period = map["period"];
-        goal.authMethod = map["auth_method"];
-        goal.authDay = List<bool>.from(map["auth_day"]);
-        goal.category = map["category"];
-        goal.isPaid = map["is_paid"];
+      if (map['user_state'] != 0) {
+        Map<dynamic, dynamic> map2 = map['goal'] as Map;
+        goal.title = map2["title"];
+        goal.period = map2["period"];
+        goal.authMethod = map2["auth_method"];
+        goal.authDay = List<bool>.from(map2["auth_day"]);
+        goal.category = map2["category"];
       } else {
         goal.title = null;
         goal.period = null;
         goal.authMethod = null;
         goal.authDay = [false, false, false, false, false, false, false];
         goal.category = null;
-        goal.isPaid = false;
       }
-      if (goal.isPaid) {
-        if (map["auth_image"] != null)
-          goal.authImage = Map<String, String>.from(map["auth_image"]);
-        goal.startDate = DateFormat('yyyy-MM-dd').parse(map["start_date"]);
-        goal.currentMoney = map["current_money"];
+      if (map['user_state'] == 3) {
+        Map<dynamic, dynamic> map2 = map['goal'] as Map;
+        if (map2['auth_image']?.auth_image != null)
+          goal.authImage = Map<String, String>.from(map2['auth_image']);
+        goal.startDate = DateFormat('yyyy-MM-dd').parse(map2['start_date']);
+        goal.currentMoney = map2['curret_money'];
       }
       setState(() {});
     });
@@ -243,27 +245,27 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
       builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
         if (snapshot.hasData) {
           Map<dynamic, dynamic> map = snapshot.data.value as Map;
-          if (map != null) {
-            goal.title = map["title"];
-            goal.period = map["period"];
-            goal.authMethod = map["auth_method"];
-            goal.authDay = List<bool>.from(map["auth_day"]);
-            goal.category = map["category"];
-            goal.isPaid = map["is_paid"];
+          if (map['user_state'] != 0) {
+            Map<dynamic, dynamic> map2 = map['goal'] as Map;
+            goal.title = map2["title"];
+            goal.period = map2["period"];
+            goal.authMethod = map2["auth_method"];
+            goal.authDay = List<bool>.from(map2["auth_day"]);
+            goal.category = map2["category"];
           } else {
             goal.title = null;
             goal.period = null;
             goal.authMethod = null;
             goal.authDay = [false, false, false, false, false, false, false];
             goal.category = null;
-            goal.isPaid = false;
           }
 
-          if (goal.isPaid) {
-            if (map["auth_image"] != null)
-              goal.authImage = Map<String, String>.from(map["auth_image"]);
-            goal.startDate = DateFormat('yyyy-MM-dd').parse(map["start_date"]);
-            goal.currentMoney = map["current_money"];
+          if (map['user_state'] == 3) {
+            Map<dynamic, dynamic> map2 = map['goal'] as Map;
+            if (map2['auth_image']?.auth_image != null)
+              goal.authImage = Map<String, String>.from(map2['auth_image']);
+            goal.startDate = DateFormat('yyyy-MM-dd').parse(map2['start_date']);
+            goal.currentMoney = map2['current_money'];
             return GoalCreatedPage();
           }
 

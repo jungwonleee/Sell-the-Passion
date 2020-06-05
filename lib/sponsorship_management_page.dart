@@ -18,13 +18,13 @@ class _SponsorshipManagementPageState extends State<SponsorshipManagementPage> {
   Widget build(BuildContext context) {
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
     SlaveGoal goal = Provider.of<SlaveGoal>(context);
-    DatabaseReference tmpRef = FirebaseDatabase.instance.reference().child('${fp.getUser().uid}').child("slave");
+    DatabaseReference tmpRef = FirebaseDatabase.instance.reference().child('users/${fp.getUser().uid}').child("slave");
     
     tmpRef.once().then((DataSnapshot snapshot) {
       slave = snapshot.value as String;
       return slave;
     }).then((value) {
-      DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('$slave').child("goal");
+      DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/$slave').child("goal");
       dbRef.once().then((DataSnapshot snapshot){
         Map<dynamic, dynamic> map = snapshot.value as Map;
         goal.title = map["title"];
@@ -46,7 +46,7 @@ class _SponsorshipManagementPageState extends State<SponsorshipManagementPage> {
         if (snapshot.hasData) {
           slave = snapshot.data.value as String;
           if (slave != null) {
-            DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('$slave').child("goal");
+            DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/$slave').child("goal");
             return FutureBuilder(
               future: dbRef.once(),
               builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
