@@ -9,7 +9,7 @@ class Goal with ChangeNotifier {
   DateTime startDate;
   List<bool> authDay = [false, false, false, false, false, false, false];
   Map<String, String> authImage = {};
-  //bool isPaid = false;
+  bool isPaid = false;
 }
 
 class SlaveGoal with ChangeNotifier {

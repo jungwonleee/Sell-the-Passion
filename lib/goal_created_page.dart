@@ -2,7 +2,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'goal_provider.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
-import 'imgae_detail_page.dart';
+import 'image_detail_page.dart';
 
 
 GoalCreatedPageState pageState;

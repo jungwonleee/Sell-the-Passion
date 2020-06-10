@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sell_the_passion/validate_page.dart';
 import 'goal_provider.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
-import 'imgae_detail_page.dart';
+import 'image_detail_page.dart';
 
 class SponsorshipCreatedPage extends StatefulWidget {
   @override

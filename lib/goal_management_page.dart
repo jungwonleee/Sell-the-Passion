@@ -3,11 +3,10 @@ import 'package:sell_the_passion/firebase_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
-
 import 'goal_provider.dart';
-
 import 'goal_created_page.dart';
 import 'add_goal_page.dart';
+import 'dart:async';
 
 class GoalManagementPage extends StatefulWidget {
   @override
@@ -70,7 +69,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
       ),
     ];
 
-    if (goal.title != null) {
+    if (goal.title != null && goal.isPaid == false) {
       widgetList.clear();
       widgetList += <Widget>[
         Container(
@@ -165,6 +164,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                             dbRef.child('goal').update({
                               'start_date': DateFormat('yyyy-MM-dd').format(goal.startDate),
                               'current_money': 0,
+                              'is_paid': true,
                             });
                             dbRef.update({
                               'user_state': 2
@@ -215,6 +215,31 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
         ),
       ];
     }
+    else if (goal.isPaid == true) {
+      widgetList.clear();
+      DateTime now = new DateTime.now();
+      DateTime nine = new DateTime(now.year, now.month, now.day, 21);
+      if (now.hour > 21) nine.add(Duration(days: 1));
+      int restseconds = nine.difference(now).inSeconds;
+      Timer timer;
+      if (timer == null) {
+        timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+          setState(() {
+            restseconds = restseconds - 1;
+          });
+        });
+      }
+      int seconds = restseconds % 60;
+      int minutes = restseconds % 3600 ~/ 60;
+      int hours = restseconds ~/ 3600;
+      widgetList += <Widget>[
+        Text('매칭신청이 완료되었습니다.', style: TextStyle(fontSize: 20)),
+        Text('매칭은 매일 21시에 이루어집니다.', style: TextStyle(fontSize: 20)),
+        SizedBox(height: 50),
+        Text('매칭까지 남은 시간', style: TextStyle(fontSize: 20)),
+        Text('$hours시간 $minutes분 $seconds초', style: TextStyle(fontSize: 40))
+      ];
+    }
 
     dbRef.once().then((DataSnapshot snapshot) {
       Map<dynamic, dynamic> map = snapshot.value as Map;
@@ -225,12 +250,15 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
         goal.authMethod = map2["auth_method"];
         goal.authDay = List<bool>.from(map2["auth_day"]);
         goal.category = map2["category"];
+        if(map['user_state'] >= 2) goal.isPaid = map2["is_paid"];
+        else goal.isPaid = false;
       } else {
         goal.title = null;
         goal.period = null;
         goal.authMethod = null;
         goal.authDay = [false, false, false, false, false, false, false];
         goal.category = null;
+        goal.isPaid = false;
       }
 
       if (map != null && map['user_state'] == 3) {
@@ -255,12 +283,15 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
             goal.authMethod = map2["auth_method"];
             goal.authDay = List<bool>.from(map2["auth_day"]);
             goal.category = map2["category"];
+            if(map['user_state'] >= 2) goal.isPaid = map2["is_paid"];
+            else goal.isPaid = false;
           } else {
             goal.title = null;
             goal.period = null;
             goal.authMethod = null;
             goal.authDay = [false, false, false, false, false, false, false];
             goal.category = null;
+            goal.isPaid = false;
           }
 
           if (map != null && map['user_state'] == 3) {

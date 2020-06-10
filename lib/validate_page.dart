@@ -127,7 +127,10 @@ class ValidatePageState extends State<ValidatePage> with TickerProviderStateMixi
   @override
   Widget build(BuildContext context) {
     timeDilation = 0.4;
-    Goal goal = Provider.of<Goal>(context);
+    SlaveGoal goal = Provider.of<SlaveGoal>(context);
+    DateTime now = new DateTime.now();
+    DateTime startDate = goal.startDate;
+    int week = (now.difference(startDate).inDays).toInt()~/7;
 
     double initialBottom = 15.0;
     var dataLength = images.length;
@@ -137,38 +140,39 @@ class ValidatePageState extends State<ValidatePage> with TickerProviderStateMixi
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: Theme.of(context).accentColor,
-        title: Text('목표 세우기'),
+        title: Text('$week주차 주간평가'),
       ),
       body: new Container(
         alignment: Alignment.center,
         child: dataLength > 0
           ? new Stack(
-              alignment: AlignmentDirectional.center,
-              children: images.asMap().entries.map((entry) {
-                int index = entry.key;
-                Image item = entry.value;
-                if (true) {
-                  return validateCard(
-                    item,
-                    bottom.value,
-                    right.value,
-                    0.0,
-                    backCardWidth + 10,
-                    rotate.value,
-                    rotate.value < -10 ? 0.1 : 0.0,
-                    context,
-                    dismissImg,
-                    flag,
-                    addImg,
-                    swipeRight,
-                    swipeLeft
-                  );
-                } else {
-                  backCardPosition = backCardPosition - 10;
-                  backCardWidth = backCardWidth + 10;
-                  return dummyCard(backCardPosition, 0.0, 0.0, backCardWidth, 0.0, 0.0, context);
+                alignment: AlignmentDirectional.center,
+                children: images.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  Image item = entry.value;
+                  if (true) {
+                    return validateCard(
+                      item,
+                      bottom.value,
+                      right.value,
+                      0.0,
+                      backCardWidth + 10,
+                      rotate.value,
+                      rotate.value < -10 ? 0.1 : 0.0,
+                      context,
+                      dismissImg,
+                      flag,
+                      addImg,
+                      swipeRight,
+                      swipeLeft
+                    );
+                  } else {
+                    backCardPosition = backCardPosition - 10;
+                    backCardWidth = backCardWidth + 10;
+                    return dummyCard(backCardPosition, 0.0, 0.0, backCardWidth, 0.0, 0.0, context);
+                  }
                 }
-              }).toList())
+              ).toList())
           : new Text("평가 완료!", style: new TextStyle(color: Colors.black, fontSize: 30.0)),
       )
     );
