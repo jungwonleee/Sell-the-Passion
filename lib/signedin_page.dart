@@ -8,6 +8,7 @@ import 'package:sell_the_passion/photo_uploader.dart';
 import 'firebase_provider.dart';
 import 'goal_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 SignedInPageState pageState;
 
@@ -49,29 +50,67 @@ class SignedInPageState extends State<SignedInPage> {
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
     Goal goal = Provider.of<Goal>(context);
     DateTime now = new DateTime.now();
+    DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/${fp.getUser().uid}');
 
     return Scaffold(
       appBar: AppBar(
         title: Text(appBarTitle[_selectedIndex], style: applesb),
         backgroundColor: _selectedIndex == 1 ? Theme.of(context).accentColor : Theme.of(context).primaryColor,
-        actions: _selectedIndex == 4 ? <Widget>[
-          FlatButton(
-            child: Text('로그아웃', style: TextStyle(
-              fontFamily: 'Apple Semibold',
-              color: Colors.white,
-              fontSize: 18)
-            ),
-            onPressed: fp.signOut,
-          )
-        ] : null
+        automaticallyImplyLeading: false,
       ),
+      endDrawer: _selectedIndex == 4 ? Drawer(
+        child: ListView(
+          padding: EdgeInsets.only(top: 0),
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(color: mint),
+              child: SafeArea(
+                child: ListTile(
+                  title: Text('메뉴', style: TextStyle(color: Colors.white, fontSize: 20)),
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text('로그아웃', style: TextStyle(fontSize: 20)),
+              onTap: fp.signOut,
+            ),
+            ListTile(
+              title: Text('회원탈퇴', style: TextStyle(fontSize: 20)),
+              onTap: (){
+                showDialog(context: context, builder: (context) {
+                  return AlertDialog(
+                    title: Text('정말로 탈퇴하시겠습니까?'),
+                    content: Text('탈퇴하는 경우 기존의 사용자 정보는 모두 삭제됩니다.'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('취소', style: TextStyle(color: mint),),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('확인', style: TextStyle(color: mint),),
+                        onPressed: () {
+                          fp.signOut();
+                          dbRef.remove();
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  );
+                });
+              },
+            ),
+          ],
+        ),
+      ) : null,
       body: _screens[_selectedIndex],
       floatingActionButton: SizedBox(
         height: 70.0,
         width: 70.0,
         child: FloatingActionButton(
           onPressed: () async {
-            if (goal == null || goal.startDate == null) {
+            if (goal.title == null || goal.startDate == null) {
               showDialog(context: context, builder: (context) {
                 return AlertDialog(
                   title: Text('오류'),

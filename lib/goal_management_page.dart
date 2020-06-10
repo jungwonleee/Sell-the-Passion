@@ -259,6 +259,9 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
         goal.authDay = [false, false, false, false, false, false, false];
         goal.category = null;
         goal.isPaid = false;
+        goal.authImage = null;
+        goal.startDate = null;
+        goal.currentMoney = null;
       }
 
       if (map != null && map['user_state'] == 3) {
@@ -292,6 +295,9 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
             goal.authDay = [false, false, false, false, false, false, false];
             goal.category = null;
             goal.isPaid = false;
+            goal.authImage = null;
+            goal.startDate = null;
+            goal.currentMoney = null;
           }
 
           if (map != null && map['user_state'] == 3) {

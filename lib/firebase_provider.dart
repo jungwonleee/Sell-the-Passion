@@ -69,5 +69,4 @@ class FirebaseProvider with ChangeNotifier {
     await _googleSignIn.signOut();
     setUser(null);
   }
-  
 }
