@@ -148,7 +148,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
               onPressed: () {
                 showDialog(context: context, builder: (context) {
                   return AlertDialog(
-                    content: Text('매칭을 시작하시겠습니까?'),
+                    content: Text('매칭을 신청하시겠습니까?'),
                     actions: <Widget>[
                       FlatButton(
                         child: Text('취소', style: TextStyle(color: mint),),
@@ -259,9 +259,6 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
         goal.authDay = [false, false, false, false, false, false, false];
         goal.category = null;
         goal.isPaid = false;
-        goal.authImage = null;
-        goal.startDate = null;
-        goal.currentMoney = null;
       }
 
       if (map != null && map['user_state'] == 3) {
@@ -295,9 +292,6 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
             goal.authDay = [false, false, false, false, false, false, false];
             goal.category = null;
             goal.isPaid = false;
-            goal.authImage = null;
-            goal.startDate = null;
-            goal.currentMoney = null;
           }
 
           if (map != null && map['user_state'] == 3) {
