@@ -292,11 +292,14 @@ class _SponsorshipCreatedPageState extends State<SponsorshipCreatedPage> {
                 children: <Widget>[
                   weekText(index+1, weekDateString(startDate.add(Duration(days: 7*index)), startDate.add(Duration(days: 7*index+6)))),
                   InkWell(
-                    child: Text("평가하기"), 
+                    child: (daysDiff == 7*(index+1))? Text("평가하기") :
+                    (daysDiff > 7*(index+1))? Text('피드백 확인') : Text(""), 
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) {
-                        return ValidatePage(images.reversed.toList());
-                      }));
+                      if (daysDiff == 7*(index+1)) {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) {
+                          return ValidatePage(images.reversed.toList());
+                        }));
+                      }
                     }
                   ),
                 ]
