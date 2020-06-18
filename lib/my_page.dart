@@ -29,7 +29,7 @@ class MyPageState extends State<MyPage> {
           child: Column(
             children: <Widget>[
               CircleAvatar(radius: 50,backgroundImage: NetworkImage(fp.getUser().photoUrl)),
-              Text(/*fp.getUser().displayName*/'Sundar Pichai', style: TextStyle(fontSize: 28), softWrap: true),
+              Text(fp.getUser().displayName, style: TextStyle(fontSize: 28), softWrap: true),
               SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -54,11 +54,26 @@ class MyPageState extends State<MyPage> {
                       ],
                     ),
                   ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
                   Container(  
                     child:Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text('3,000원', style: TextStyle(fontSize: 30, color: mint)),
+                        Text('12,600p', style: TextStyle(fontSize: 30, color: mint)),
+                        SizedBox(height: 5.0),
+                        Text('보유 포인트', style: TextStyle(fontSize: 15)),
+                      ],
+                    ),
+                  ),
+                  Container(  
+                    child:Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text('3,000원', style: TextStyle(fontSize: 30)),
                         SizedBox(height: 5.0),
                         Text('미환급 금액', style: TextStyle(fontSize: 15)),
                       ],

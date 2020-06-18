@@ -162,7 +162,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                           goal.startDate = DateTime.now();
                           setState(() {
                             dbRef.child('goal').update({
-                              'start_date': DateFormat('yyyy-MM-dd').format(goal.startDate),
+                              //'start_date': DateFormat('yyyy-MM-dd').format(goal.startDate),
                               'current_money': 0,
                               'is_paid': true,
                             });
@@ -260,7 +260,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                       setState(() {
                         dbRef.child('goal').update({
                           //'start_date': DateFormat('yyyy-MM-dd').format(goal.startDate),
-                          //'current_money': 0,
+                          'current_money': 0,
                           'is_paid': false,
                         });
                         dbRef.update({
@@ -290,6 +290,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
         goal.category = map2["category"];
         if(map['user_state'] >= 2) goal.isPaid = map2["is_paid"];
         else goal.isPaid = false;
+        if (map['user_state'] < 3) goal.startDate = null;
       } else {
         goal.title = null;
         goal.period = null;
@@ -297,6 +298,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
         goal.authDay = [false, false, false, false, false, false, false];
         goal.category = null;
         goal.isPaid = false;
+        goal.startDate = null;
       }
 
       if (map != null && map['user_state'] == 3) {
@@ -323,6 +325,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
             goal.category = map2["category"];
             if(map['user_state'] >= 2) goal.isPaid = map2["is_paid"];
             else goal.isPaid = false;
+            if (map['user_state'] < 3) goal.startDate = null;
           } else {
             goal.title = null;
             goal.period = null;
@@ -330,6 +333,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
             goal.authDay = [false, false, false, false, false, false, false];
             goal.category = null;
             goal.isPaid = false;
+            goal.startDate = null;
           }
 
           if (map != null && map['user_state'] == 3) {
