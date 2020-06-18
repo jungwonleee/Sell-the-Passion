@@ -169,7 +169,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                             dbRef.update({
                               'user_state': 2
                             });
-                            queueRef.child('0${goal.category}').child('0${goal.period}').push().set(fp.getUser().uid);
+                            queueRef.child('0${goal.category}').child('0${goal.period}').child(fp.getUser().uid).set(fp.getUser().uid);
                           });
                           Navigator.pop(context);
                         },
@@ -237,7 +237,45 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
         Text('매칭은 매일 21시에 이루어집니다.', style: TextStyle(fontSize: 20)),
         SizedBox(height: 50),
         Text('매칭까지 남은 시간', style: TextStyle(fontSize: 20)),
-        Text('$hours시간 $minutes분 $seconds초', style: TextStyle(fontSize: 40))
+        Text('$hours시간 $minutes분 $seconds초', style: TextStyle(fontSize: 40)),
+        RaisedButton(
+          color: Colors.white,
+          elevation: 7.0,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+          child: Text('매칭 취소하기', style: TextStyle(fontSize: 15, color: mint)),
+          onPressed: () {
+            showDialog(context: context, builder: (context) {
+              return AlertDialog(
+                content: Text('매칭을 취소하시겠습니까?'),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('취소', style: TextStyle(color: mint),),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  FlatButton(
+                    child: Text('확인', style: TextStyle(color: mint),),
+                    onPressed: () {
+                      setState(() {
+                        dbRef.child('goal').update({
+                          //'start_date': DateFormat('yyyy-MM-dd').format(goal.startDate),
+                          //'current_money': 0,
+                          'is_paid': false,
+                        });
+                        dbRef.update({
+                          'user_state': 1
+                        });
+                        queueRef.child('0${goal.category}').child('0${goal.period}').child(fp.getUser().uid).remove();
+                      });
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              );
+            });
+          }
+        ),
       ];
     }
 
