@@ -145,7 +145,7 @@ class MyPageState extends State<MyPage> {
                 Text('인증방법', style: TextStyle(fontSize: 15)),
                 SizedBox(width: 12),
                 Flexible(
-                  child: Text('조깅 후 운동복 차림의 모습을 찍는다.조깅 후 운동복 차림의 모습을 찍는다.', style: TextStyle(fontSize: 15), softWrap: true)
+                  child: Text('조깅 후 운동복 차림의 모습을 찍는다.', style: TextStyle(fontSize: 15), softWrap: true)
                 ),
               ]),
             ],
