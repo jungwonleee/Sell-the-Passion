@@ -33,7 +33,9 @@ class _SponsorshipManagementPageState extends State<SponsorshipManagementPage> {
         goal.authDay = List<bool>.from(map["auth_day"]);
         goal.category = map["category"];
         goal.isPaid = map["is_paid"];
-        if (map["auth_image"] != null) goal.authImage = Map<String, String>.from(map["auth_image"]);
+        if (map['auth_image'] != null) goal.authImage = Map<String, String>.from(map['auth_image']);
+        if (map['image_check'] != null) goal.imageCheck = Map<String, bool>.from(map['image_check']);
+        if (map['feedback_message'] != null) goal.feedbackMessage = Map<String, String>.from(map['feedback_message']);
         goal.startDate = DateFormat('yyyy-MM-dd').parse(map["start_date"]);
         goal.currentMoney = map["current_money"];
         setState(() {});
@@ -58,10 +60,12 @@ class _SponsorshipManagementPageState extends State<SponsorshipManagementPage> {
                   goal.authDay = List<bool>.from(map["auth_day"]);
                   goal.category = map["category"];
                   goal.isPaid = map["is_paid"];
-                  if (map["auth_image"] != null) goal.authImage = Map<String, String>.from(map["auth_image"]);
+                  if (map['auth_image'] != null) goal.authImage = Map<String, String>.from(map['auth_image']);
+                  if (map['image_check'] != null) goal.imageCheck = Map<String, bool>.from(map['image_check']);
+                  if (map['feedback_message'] != null) goal.feedbackMessage = Map<String, String>.from(map['feedback_message']);
                   goal.startDate = DateFormat('yyyy-MM-dd').parse(map["start_date"]);
                   goal.currentMoney = map["current_money"];
-                  return SponsorshipCreatedPage();
+                  return SponsorshipCreatedPage(slave);
                 }
                 return SizedBox(height: 0);
               },

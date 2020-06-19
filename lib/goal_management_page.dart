@@ -303,8 +303,9 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
 
       if (map != null && map['user_state'] == 3) {
         Map<dynamic, dynamic> map2 = map['goal'] as Map;
-        if (map2['auth_image'] != null)
-          goal.authImage = Map<String, String>.from(map2['auth_image']);
+        if (map2['auth_image'] != null) goal.authImage = Map<String, String>.from(map2['auth_image']);
+        if (map2['image_check'] != null) goal.imageCheck = Map<String, bool>.from(map2['image_check']);
+        if (map2['feedback_message'] != null) goal.feedbackMessage = Map<String, String>.from(map2['feedback_message']);
         goal.startDate = DateFormat('yyyy-MM-dd').parse(map2['start_date']);
         goal.currentMoney = map2['curret_money'];
       }
@@ -338,8 +339,9 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
 
           if (map != null && map['user_state'] == 3) {
             Map<dynamic, dynamic> map2 = map['goal'] as Map;
-            if (map2['auth_image'] != null)
-              goal.authImage = Map<String, String>.from(map2['auth_image']);
+            if (map2['auth_image'] != null) goal.authImage = Map<String, String>.from(map2['auth_image']);
+            if (map2['image_check'] != null) goal.imageCheck = Map<String, bool>.from(map2['image_check']);
+            if (map2['feedback_message'] != null) goal.feedbackMessage = Map<String, String>.from(map2['feedback_message']);
             goal.startDate = DateFormat('yyyy-MM-dd').parse(map2['start_date']);
             goal.currentMoney = map2['current_money'];
             return GoalCreatedPage();

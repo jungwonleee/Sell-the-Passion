@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:sell_the_passion/firebase_provider.dart';
-import 'package:provider/provider.dart';
+//import 'package:firebase_database/firebase_database.dart';
+//import 'package:sell_the_passion/firebase_provider.dart';
+//import 'package:provider/provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'validate_page.dart';
+//import 'validate_page.dart';
 
 class NotificationPage extends StatefulWidget {
   @override
@@ -11,11 +12,60 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
+  final List<Message> messageList = [];
+
+  void firebaseCloudMessagingListeners() {
+    FirebaseMessaging().getToken().then((token){
+      print('token:'+token);
+    });
+
+    FirebaseMessaging().configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print('on message $message');
+        final notification = message['notification'];
+        setState(() {
+          messageList.add(Message(notification['title'], notification['body']));
+        });
+      },
+
+      onResume: (Map<String, dynamic> message) async {
+        print('on resume $message');
+      },
+
+      onLaunch: (Map<String, dynamic> message) async {
+        print('on launch $message');
+        final notification = message['data'];
+        setState(() {
+          messageList.add(Message('${notification['title']}', '${notification['body']}'));
+        });
+      }
+    );
+
+    FirebaseMessaging().requestNotificationPermissions(
+      const IosNotificationSettings(sound: true, badge: true, alert: true)
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    firebaseCloudMessagingListeners();
+  }
 
   @override
   Widget build(BuildContext context) {
 
-    FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
+    return Scaffold(
+      body: messageList.length == 0 ?
+        Center(
+          child: Text('알림 없음', style: TextStyle(fontSize: 20))
+        ) :
+        ListView(
+          children: messageList.map(buildMessage).toList(),
+        )
+    );
+
+    /*FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
     DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/${fp.getUser().uid}').child("notification");
 
     //Color mint = Theme.of(context).primaryColor;
@@ -45,6 +95,22 @@ class _NotificationPageState extends State<NotificationPage> {
           }
         );
       },
-    );
+    );*/
+  }
+}
+
+Widget buildMessage(Message message) => Card(
+  child: ListTile(
+    title: Text(message.title),
+    subtitle: Text(message.body),
+  )
+);
+
+class Message {
+  String title;
+  String body;
+  Message(title, body) {
+    this.title = title;
+    this.body = body;
   }
 }

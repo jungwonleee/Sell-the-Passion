@@ -211,38 +211,54 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ImageDetailPage(goal.authImage["0$imgIdx"], imageDate)));
                 },
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 4.0),
-                  width:120.0,
-                  height:120.0,
-                  child: Hero(
-                    tag: goal.authImage["0$imgIdx"],
-                    child: new Image.network(
-                      goal.authImage["0$imgIdx"], 
-                      fit: BoxFit.cover,
-                      loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null ? 
-                                loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
-                                : null,
-                          ),
-                        );
-                      }
+                child: Stack(
+                  alignment: Alignment.bottomRight,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 4.0),
+                      width:120.0,
+                      height:120.0,
+                      child: Hero(
+                        tag: goal.authImage["0$imgIdx"],
+                        child: new Image.network(
+                          goal.authImage["0$imgIdx"], 
+                          fit: BoxFit.fill,
+                          loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null ? 
+                                    loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                                    : null,
+                              ),
+                            );
+                          }
+                        ),
+                      )
                     ),
-                  )
-                )
+                    Container(
+                      child: goal.imageCheck["0$imgIdx"] == true ? Image.asset('assets/approved.png', width: 30, height: 30) : SizedBox(width: 0)
+                    )
+                  ],
+                ) 
               );
             }
 
             if (goal.authDay[(j+startDay)%7]) {
-              return Container(
-                margin: EdgeInsets.symmetric(horizontal: 4.0),
-                width:120.0,
-                height:120.0,
-                color: Color(0xFFB8C6D4),
-                child: Center(child: Text(day, style: TextStyle(fontFamily: 'Apple Semibold', fontSize: 30, color: Colors.white))),
+              return Stack(
+                alignment: Alignment.bottomRight,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 4.0),
+                    width:120.0,
+                    height:120.0,
+                    color: Color(0xFFB8C6D4),
+                    child: Center(child: Text(day, style: TextStyle(fontFamily: 'Apple Semibold', fontSize: 30, color: Colors.white))),
+                  ),
+                  Container(
+                    child: goal.imageCheck["0$imgIdx"] != null ? Image.asset('assets/declined.png', width: 30, height: 30) : SizedBox(width: 0)
+                  )
+                ],
               );
             }
 
@@ -268,7 +284,33 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              weekText(index+1, weekDateString(startDate.add(Duration(days: 7*index)), startDate.add(Duration(days: 7*index+6)))),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  weekText(index+1, weekDateString(startDate.add(Duration(days: 7*index)), startDate.add(Duration(days: 7*index+6)))),
+                  InkWell(
+                    child: (daysDiff > 7*(index+1) || goal.feedbackMessage["0$index"] != null)? Text('피드백 확인') : SizedBox(width: 0), 
+                    onTap: () {
+                      if (daysDiff > 7*(index+1) || goal.feedbackMessage["0$index"] != null) {
+                        showDialog(context: context, builder: (context) {
+                          return AlertDialog(
+                            title: Text('${index+1}주차 피드백 메시지'),
+                            content: Text('${goal.feedbackMessage["0$index"]}'),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('확인', style: TextStyle(color: mint),),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              )
+                            ],
+                          );
+                        });
+                      }
+                    }
+                  ),
+                ]
+              ),
               SizedBox(height: 8),
               weekImage(index),
               SizedBox(height: 10),
