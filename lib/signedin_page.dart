@@ -9,6 +9,7 @@ import 'firebase_provider.dart';
 import 'goal_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'point_top_up_page.dart';
 
 SignedInPageState pageState;
 
@@ -69,6 +70,14 @@ class SignedInPageState extends State<SignedInPage> {
                   title: Text('메뉴', style: TextStyle(color: Colors.white, fontSize: 20)),
                 ),
               ),
+            ),
+            ListTile(
+              title: Text('포인트 충전', style: TextStyle(fontSize: 20)),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) {
+                  return PointTopUpPage();
+                }));
+              },
             ),
             ListTile(
               title: Text('로그아웃', style: TextStyle(fontSize: 20)),

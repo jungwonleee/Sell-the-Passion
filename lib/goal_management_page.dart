@@ -7,6 +7,7 @@ import 'goal_provider.dart';
 import 'goal_created_page.dart';
 import 'add_goal_page.dart';
 import 'dart:async';
+import 'payment_page.dart';
 
 class GoalManagementPage extends StatefulWidget {
   @override
@@ -48,6 +49,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
     DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/${fp.getUser().uid}');
     DatabaseReference queueRef = FirebaseDatabase.instance.reference().child('ready_queue');
     Goal goal = Provider.of<Goal>(context);
+    User user = Provider.of<User>(context);
 
     Color mint = Theme.of(context).primaryColor;
     Color brown = Theme.of(context).accentColor;
@@ -146,7 +148,10 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
               child: Text('후원 매칭하기', style: TextStyle(fontSize: 15, color: mint)),
               onPressed: () {
-                showDialog(context: context, builder: (context) {
+                Navigator.push(context, MaterialPageRoute(builder: (_) {
+                  return PaymentPage();
+                }));
+                /*showDialog(context: context, builder: (context) {
                   return AlertDialog(
                     content: Text('매칭을 신청하시겠습니까?'),
                     actions: <Widget>[
@@ -176,7 +181,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                       )
                     ],
                   );
-                });
+                });*/
               }
             ),
             IconButton(
@@ -246,7 +251,8 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
           onPressed: () {
             showDialog(context: context, builder: (context) {
               return AlertDialog(
-                content: Text('매칭을 취소하시겠습니까?'),
+                title: Text('매칭을 취소하시겠습니까?'),
+                content: Text('매칭을 취소하실 경우 차감된 포인트는 환불됩니다.'),
                 actions: <Widget>[
                   FlatButton(
                     child: Text('취소', style: TextStyle(color: mint),),
@@ -264,7 +270,8 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                           'is_paid': false,
                         });
                         dbRef.update({
-                          'user_state': 1
+                          'user_state': 1,
+                          "point" : user.point+4200*(goal.period+1)
                         });
                         queueRef.child('0${goal.category}').child('0${goal.period}').child(fp.getUser().uid).remove();
                       });
@@ -283,6 +290,8 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
       Map<dynamic, dynamic> map = snapshot.value as Map;
       if (map!=null && map['user_state'] != 0) {
         Map<dynamic, dynamic> map2 = map['goal'] as Map;
+        if (map['point'] != null) user.point = map['point'] as int;
+        else user.point = 0;
         goal.title = map2["title"];
         goal.period = map2["period"];
         goal.authMethod = map2["auth_method"];
@@ -299,6 +308,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
         goal.category = null;
         goal.isPaid = false;
         goal.startDate = null;
+        user.point = 0;
       }
 
       if (map != null && map['user_state'] == 3) {
@@ -319,6 +329,8 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
           Map<dynamic, dynamic> map = snapshot.data.value as Map;
           if (map != null && map['user_state'] != 0) {
             Map<dynamic, dynamic> map2 = map['goal'] as Map;
+            if (map['point'] != null) user.point = map['point'] as int;
+            else user.point = 0;
             goal.title = map2["title"];
             goal.period = map2["period"];
             goal.authMethod = map2["auth_method"];
@@ -335,6 +347,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
             goal.category = null;
             goal.isPaid = false;
             goal.startDate = null;
+            user.point = 0;
           }
 
           if (map != null && map['user_state'] == 3) {

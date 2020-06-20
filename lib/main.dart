@@ -21,6 +21,8 @@ class MyApp extends StatelessWidget {
           create: (_) => Goal()),
         ChangeNotifierProvider<SlaveGoal>(
           create: (_) => SlaveGoal()),
+        ChangeNotifierProvider<User>(
+          create: (_) => User())
       ],
       child: MaterialApp(
         title: "Sell the Passion",

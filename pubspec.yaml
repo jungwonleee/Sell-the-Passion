@@ -61,6 +61,8 @@ flutter:
     - assets/google_logo.png
     - assets/approved.png
     - assets/declined.png
+    - assets/top_up.png
+    - assets/coffee.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

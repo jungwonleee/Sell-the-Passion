@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sell_the_passion/add_goal_page.dart';
 import 'firebase_provider.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+import 'goal_provider.dart';
 
 MyPageState pageState;
 
@@ -18,6 +21,10 @@ class MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     Color brown = Theme.of(context).accentColor;
+
+    FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
+    User user = Provider.of<User>(context);
+    DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/${fp.getUser().uid}');
 
     Widget myInfo() {
     FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
@@ -63,7 +70,8 @@ class MyPageState extends State<MyPage> {
                     child:Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text('12,600p', style: TextStyle(fontSize: 30, color: mint)),
+                        user.point != null ? Text('${FlutterMoneyFormatter(amount: user.point.toDouble()).output.withoutFractionDigits}p', style: TextStyle(fontSize: 30, color: mint)) :
+                        Text('0p', style: TextStyle(fontSize: 30, color: mint)),
                         SizedBox(height: 5.0),
                         Text('보유 포인트', style: TextStyle(fontSize: 15)),
                       ],
@@ -168,22 +176,34 @@ class MyPageState extends State<MyPage> {
       }
     );
 
-    return Scaffold(
-      backgroundColor: Colors.grey[200],
-      body: SafeArea(
-        top: true,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            myInfo(),
-            Expanded(
-              child: Container(
-                child: historyRows,
-              )
+    dbRef.child('point').once().then((DataSnapshot snapshot) {
+      user.point = snapshot.value as int;
+      setState(() {});
+    });
+    
+    return FutureBuilder(
+      future: dbRef.child('point').once(),
+      builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
+        if (snapshot.hasData) user.point = snapshot.data.value as int;
+        else return Center( child: CircularProgressIndicator() );
+        return Scaffold(
+          backgroundColor: Colors.grey[200],
+          body: SafeArea(
+            top: true,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                myInfo(),
+                Expanded(
+                  child: Container(
+                    child: historyRows,
+                  )
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

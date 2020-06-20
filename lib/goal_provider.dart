@@ -27,3 +27,7 @@ class SlaveGoal with ChangeNotifier {
   Map<String, String> feedbackMessage = {};
   bool isPaid = false;
 }
+
+class User with ChangeNotifier {
+  int point = 0;
+}
