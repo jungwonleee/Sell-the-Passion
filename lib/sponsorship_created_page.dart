@@ -14,6 +14,18 @@ class SponsorshipCreatedPage extends StatefulWidget {
 }
 
 class _SponsorshipCreatedPageState extends State<SponsorshipCreatedPage> {
+  int key;
+
+  @override
+  void initState() {
+    Goal goal = Provider.of<Goal>(context, listen: false);
+    DateTime now = new DateTime.now();
+    setState(() {
+      if (goal.startDate.isAfter(now)) key = 1;
+      else key = 0;
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +45,9 @@ class _SponsorshipCreatedPageState extends State<SponsorshipCreatedPage> {
 
     String authDayString(List<bool> authDay) {
       String s='';
-      for (int i=0; i<7; i++) {
-        if (authDay[i]) {
-          s+=days[i];
+      for (int i=1; i<=7; i++) {
+        if (authDay[i%7]) {
+          s+=days[i%7];
           s+=' ';
         }
       }
@@ -330,8 +342,20 @@ class _SponsorshipCreatedPageState extends State<SponsorshipCreatedPage> {
       body: SafeArea(
         top: true,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: key == 1 ? <Widget>[
+            Center(
+              child: Column(
+                children: <Widget>[
+                  Image.asset('assets/smile.png', height: 120, width: 120),
+                  SizedBox(height: 20),
+                  Text('매칭이 정상적으로 완료되었습니다.', style: TextStyle(fontSize: 20)),
+                  Text('내일 후원관리 화면이 활성화됩니다.', style: TextStyle(fontSize: 20))
+                ],
+              )
+            )
+          ] : 
+          <Widget>[
             goalInfo(),
             Expanded(
               child: Card (

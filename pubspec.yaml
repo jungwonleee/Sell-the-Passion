@@ -63,6 +63,8 @@ flutter:
     - assets/declined.png
     - assets/top_up.png
     - assets/coffee.png
+    - assets/sad.png
+    - assets/smile.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

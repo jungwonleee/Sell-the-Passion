@@ -70,9 +70,6 @@ class _PaymentPageState extends State<PaymentPage> {
                         child: Text('확인', style: TextStyle(color: mint),),
                         onPressed: () {
                           if (user.point == null) user.point = 0;
-                          dbRef.update({
-                            "point" : user.point-4200*(goal.period+1)
-                          });
                           setState(() {
                             dbRef.update({
                               "point" : user.point-4200*(goal.period+1),
