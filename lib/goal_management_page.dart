@@ -151,37 +151,6 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                 Navigator.push(context, MaterialPageRoute(builder: (_) {
                   return PaymentPage();
                 }));
-                /*showDialog(context: context, builder: (context) {
-                  return AlertDialog(
-                    content: Text('매칭을 신청하시겠습니까?'),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text('취소', style: TextStyle(color: mint),),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      FlatButton(
-                        child: Text('확인', style: TextStyle(color: mint),),
-                        onPressed: () {
-                          goal.startDate = DateTime.now();
-                          setState(() {
-                            dbRef.child('goal').update({
-                              //'start_date': DateFormat('yyyy-MM-dd').format(goal.startDate),
-                              'current_money': 0,
-                              'is_paid': true,
-                            });
-                            dbRef.update({
-                              'user_state': 2
-                            });
-                            queueRef.child('0${goal.category}').child('0${goal.period}').child(fp.getUser().uid).set(fp.getUser().uid);
-                          });
-                          Navigator.pop(context);
-                        },
-                      )
-                    ],
-                  );
-                });*/
               }
             ),
             IconButton(

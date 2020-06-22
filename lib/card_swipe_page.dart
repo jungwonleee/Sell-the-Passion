@@ -154,13 +154,18 @@ class _CardSwipePageState extends State<CardSwipePage> with TickerProviderStateM
                 });
               }
               else {
+                int approvedNum = 0;
                 for (int i=0; i<cardImages.length; i++) {
+                  if (cardImages[i].approved == true) approvedNum += 1; 
                   dbRef.child('image_check').update(
                     {"0${cardImages[i].index}": cardImages[i].approved}
                   );
                 }
                 dbRef.child('feedback_message').update(
                   {"0${week-1}": feedbackMessageController.text}
+                );
+                dbRef.update(
+                  {"current_money": goal.currentMoney += 4200*approvedNum ~/ cardImages.length}
                 );
                 Navigator.pop(context);
               }
