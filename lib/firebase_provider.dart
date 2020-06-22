@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 Logger logger = Logger();
 
@@ -48,15 +49,15 @@ class FirebaseProvider with ChangeNotifier {
       assert(user.uid == currentUser.uid);
       setUser(user);
       DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/${currentUser.uid}');
+      final String userToken = await FirebaseMessaging().getToken();
       await dbRef.child('user_state').once().then((DataSnapshot snapshot) {
         if (snapshot.value == null) {
           dbRef.update({
-            'user_state': 0
+            'user_state': 0,
+            'user_token': userToken
           });
-          //print('user_state created');
         }
       });
-      //print('hello world');
       return true;
     } on Exception catch (e) {
       logger.e(e.toString());

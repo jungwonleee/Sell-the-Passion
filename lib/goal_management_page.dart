@@ -8,6 +8,7 @@ import 'goal_created_page.dart';
 import 'add_goal_page.dart';
 import 'dart:async';
 import 'payment_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class GoalManagementPage extends StatefulWidget {
   @override
@@ -52,6 +53,7 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
     DatabaseReference queueRef = FirebaseDatabase.instance.reference().child('ready_queue');
     Goal goal = Provider.of<Goal>(context);
     User user = Provider.of<User>(context);
+    String userToken;
 
     Color mint = Theme.of(context).primaryColor;
     Color brown = Theme.of(context).accentColor;
@@ -261,14 +263,15 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
                       ),
                       FlatButton(
                         child: Text('확인', style: TextStyle(color: mint),),
-                        onPressed: () {
+                        onPressed: () async {
+                          userToken = await FirebaseMessaging().getToken();
                           setState(() {
                             dbRef.update({
                               'user_state': 2 
                             });
                             dbRef.child('slave').remove();
                             dbRef.child('goal').child('start_date').remove();
-                            queueRef.child('0${goal.category}').child('0${goal.period}').child(fp.getUser().uid).set(fp.getUser().uid);
+                            queueRef.child('0${goal.category}').child('0${goal.period}').child(fp.getUser().uid).set([fp.getUser().uid, userToken]);
                           });
                           Navigator.pop(context);
                         },

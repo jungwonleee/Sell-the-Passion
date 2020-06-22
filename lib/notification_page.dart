@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-/*import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:sell_the_passion/firebase_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';*/
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class NotificationPage extends StatefulWidget {
   @override
@@ -10,52 +10,11 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  /*List<Message> messageList;
-
-  void firebaseCloudMessagingListeners() {
-    FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
-    DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/${fp.getUser().uid}');
-
-    FirebaseMessaging().getToken().then((token){
-      print('token:'+token);
-    });
-
-    FirebaseMessaging().configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print('on message $message');
-        final notification = message['notification'];
-        setState(() {
-          messageList.add(Message(notification['title'], notification['body']));
-        });
-      },
-
-      onResume: (Map<String, dynamic> message) async {
-        print('on resume $message');
-      },
-
-      onLaunch: (Map<String, dynamic> message) async {
-        print('on launch $message');
-        final notification = message['data'];
-        setState(() {
-          messageList.add(Message('${notification['title']}', '${notification['body']}'));
-        });
-      }
-    );
-
-    FirebaseMessaging().requestNotificationPermissions(
-      const IosNotificationSettings(sound: true, badge: true, alert: true)
-    );
-  }
-
-  @override
-  void initState() {
-    firebaseCloudMessagingListeners();
-    super.initState();
-  }*/
-
+  
   @override
   Widget build(BuildContext context) {
-
+    FirebaseProvider fp = Provider.of<FirebaseProvider>(context);
+    DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/${fp.getUser().uid}');
     /*return Scaffold(
       body: messageList.length == 0 ?
         Center(
@@ -65,7 +24,7 @@ class _NotificationPageState extends State<NotificationPage> {
           children: messageList.map(buildMessage).toList(),
         )
     );*/
-    List<dynamic> messageList = [
+    /*List<dynamic> messageList = [
       {
         "type" : 0,
         "title" : "매칭 완료",
@@ -86,18 +45,18 @@ class _NotificationPageState extends State<NotificationPage> {
         "title" : "평가 완료",
         "body" : "후원자가 평가를 완료하였습니다. 평가 내용을 확인해주세요."
       },
-    ];
+    ];*/
 
-    Color brown = Theme.of(context).accentColor;
+    /*Color brown = Theme.of(context).accentColor;
 
     return Scaffold(
       backgroundColor: Colors.grey[200],
       body: ListView.builder(
         itemCount: messageList.length,
         itemBuilder: (context, index) {
-          int type = messageList[index]["type"] as int;
-          String title = messageList[index]["title"] as String;
-          String body = messageList[index]["body"] as String;
+          int type = messageList[index].type;
+          String title = messageList[index].title;
+          String body = messageList[index].body;
           return Card(
             child: ListTile(
               leading:  type == 0 ? Icon(Icons.supervisor_account, size: 50, color: brown) :
@@ -108,22 +67,47 @@ class _NotificationPageState extends State<NotificationPage> {
           );
         },
       )
+    );*/
+
+    dbRef.child('notification').once().then((DataSnapshot snapshot) {
+      Map<dynamic, dynamic> map = snapshot.value as Map;
+      setState(() {
+        
+      });
+
+    });
+
+    Color brown = Theme.of(context).accentColor;
+
+    return FutureBuilder(
+      future: dbRef.child('notification').once(),
+      builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.value == null) {
+            return Center(child: Text('알림 없음', style: TextStyle(fontSize: 20)));
+          }
+          Map<dynamic, dynamic> map = Map.from(snapshot.data.value);
+          List<dynamic> keyList = map.keys.toList();
+          return ListView.builder(
+            itemCount: map.length,
+            itemBuilder: (context, index) {
+              Map<dynamic, dynamic> message = map[keyList[0]];
+              int type = int.parse(message['type']);
+              String title = message['title'];
+              String body = message['body'];
+              return Card(
+                child: ListTile(
+                  leading:  type == 0 ? Icon(Icons.supervisor_account, size: 50, color: brown) :
+                  type == 1 ? Icon(Icons.camera_alt, size: 50, color: brown) : Icon(Icons.playlist_add_check, size: 50, color: brown),
+                  title: Text(title),
+                  subtitle: Text(body),
+                ),
+              );
+            }
+          );
+        }
+        return Center( child: CircularProgressIndicator() );
+      }
     );
   }
 }
-
-/*Widget buildMessage(Message message) => Card(
-  child: ListTile(
-    title: Text(message.title),
-    subtitle: Text(message.body),
-  )
-);
-
-class Message {
-  String title;
-  String body;
-  Message(title, body) {
-    this.title = title;
-    this.body = body;
-  }
-}*/

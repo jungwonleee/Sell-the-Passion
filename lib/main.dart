@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<SlaveGoal>(
           create: (_) => SlaveGoal()),
         ChangeNotifierProvider<User>(
-          create: (_) => User())
+          create: (_) => User()),
       ],
       child: MaterialApp(
         title: "Sell the Passion",
@@ -42,6 +43,8 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
     return AuthPage();

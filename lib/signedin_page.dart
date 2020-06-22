@@ -10,6 +10,7 @@ import 'goal_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'point_top_up_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 SignedInPageState pageState;
 
@@ -45,6 +46,42 @@ class SignedInPageState extends State<SignedInPage> {
     NotificationPage(),
     MyPage()
   ];
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  @override
+  void initState() {
+    FirebaseProvider fp = Provider.of<FirebaseProvider>(context, listen: false);
+    super.initState();
+    DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/${fp.getUser().uid}');
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        /*final notification = message['data'];
+        setState(() {
+          dbRef.child("notification").push().set({
+            'type': notification['type'],
+            'title': notification['title'],
+            'body': notification['body']
+          });
+        });*/
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        /*final notification = message['data'];
+        setState(() {
+          dbRef.child("notification").push().set({
+            'type': notification['type'],
+            'title': notification['title'],
+            'body': notification['body']
+          });
+        });*/
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

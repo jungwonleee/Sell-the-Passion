@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'firebase_provider.dart';
 import 'goal_provider.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class PaymentPage extends StatefulWidget {
   @override
@@ -29,6 +30,7 @@ class _PaymentPageState extends State<PaymentPage> {
     Goal goal = Provider.of<Goal>(context);
     DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/${fp.getUser().uid}');
     DatabaseReference queueRef = FirebaseDatabase.instance.reference().child('ready_queue');
+    String userToken;
 
     return Scaffold(
       appBar: AppBar(
@@ -68,7 +70,8 @@ class _PaymentPageState extends State<PaymentPage> {
                       ),
                       FlatButton(
                         child: Text('확인', style: TextStyle(color: mint),),
-                        onPressed: () {
+                        onPressed: () async {
+                          userToken = await FirebaseMessaging().getToken();
                           if (user.point == null) user.point = 0;
                           setState(() {
                             dbRef.update({
@@ -76,11 +79,10 @@ class _PaymentPageState extends State<PaymentPage> {
                               "user_state" : 2
                             });
                             dbRef.child('goal').update({
-                              //'start_date': DateFormat('yyyy-MM-dd').format(goal.startDate),
                               'current_money': 0,
                               'is_paid': true,
                             });
-                            queueRef.child('0${goal.category}').child('0${goal.period}').child(fp.getUser().uid).set(fp.getUser().uid);
+                            queueRef.child('0${goal.category}').child('0${goal.period}').child(fp.getUser().uid).set([fp.getUser().uid, userToken]);
                             key = 1;
                           });
                           Navigator.pop(context);
