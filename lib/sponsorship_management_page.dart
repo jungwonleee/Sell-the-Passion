@@ -47,7 +47,7 @@ class _SponsorshipManagementPageState extends State<SponsorshipManagementPage> {
       builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
         if (snapshot.hasData) {
           slave = snapshot.data.value as String;
-          if (slave != null) {
+          if (slave != null && slave != fp.getUser().uid) {
             DatabaseReference dbRef = FirebaseDatabase.instance.reference().child('users/$slave').child("goal");
             return FutureBuilder(
               future: dbRef.once(),

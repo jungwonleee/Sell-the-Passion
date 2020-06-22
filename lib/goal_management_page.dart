@@ -15,6 +15,8 @@ class GoalManagementPage extends StatefulWidget {
 }
 
 class _GoalManagementPageState extends State<GoalManagementPage> {
+  String slave;
+
   String categoryString(int c) {
     String s="";
     switch(c) {
@@ -189,7 +191,98 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
         ),
       ];
     }
-    else if (goal.isPaid == true) {
+    else if (slave != null && slave == fp.getUser().uid) {
+      widgetList.clear();
+      widgetList += <Widget>[
+        Image.asset('assets/sad.png', height: 120, width: 120),
+        SizedBox(height: 20),
+        Text('사용자 풀이 적어', style: TextStyle(fontSize: 20)),
+        Text('매칭에 실패하였습니다.', style: TextStyle(fontSize: 20)),
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            RaisedButton(
+              color: Colors.white,
+              elevation: 7.0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+              child: Text('매칭 취소하기', style: TextStyle(fontSize: 15, color: mint)),
+              onPressed: () {
+                showDialog(context: context, builder: (context) {
+                  return AlertDialog(
+                    title: Text('매칭을 취소하시겠습니까?'),
+                    content: Text('매칭을 취소하실 경우 차감된 포인트는 환불됩니다.'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('취소', style: TextStyle(color: mint),),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('확인', style: TextStyle(color: mint),),
+                        onPressed: () {
+                          setState(() {
+                            dbRef.child('goal').update({
+                              'current_money': 0,
+                              'is_paid': false,
+                            });
+                            dbRef.update({
+                              'user_state': 1,
+                              "point" : user.point+4200*(goal.period+1)
+                            });
+                            dbRef.child('slave').remove();
+                            dbRef.child('goal').child('start_date').remove();
+                          });
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  );
+                });
+              }
+            ),
+            SizedBox(width: 20),
+            RaisedButton(
+              color: Colors.white,
+              elevation: 7.0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+              child: Text('다시 신청하기', style: TextStyle(fontSize: 15, color: mint)),
+              onPressed: () {
+                showDialog(context: context, builder: (context) {
+                  return AlertDialog(
+                    title: Text('매칭을 다시 신청하시겠습니까?'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('취소', style: TextStyle(color: mint),),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('확인', style: TextStyle(color: mint),),
+                        onPressed: () {
+                          setState(() {
+                            dbRef.update({
+                              'user_state': 2 
+                            });
+                            dbRef.child('slave').remove();
+                            dbRef.child('goal').child('start_date').remove();
+                            queueRef.child('0${goal.category}').child('0${goal.period}').child(fp.getUser().uid).set(fp.getUser().uid);
+                          });
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  );
+                });
+              }
+            ),
+          ],
+        )
+      ];
+    }
+    else if (slave == null && goal.isPaid == true) {
       widgetList.clear();
       DateTime now = new DateTime.now();
       DateTime nine = new DateTime(now.year, now.month, now.day, 21);
@@ -268,7 +361,10 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
         goal.category = map2["category"];
         if(map['user_state'] >= 2) goal.isPaid = map2["is_paid"];
         else goal.isPaid = false;
-        if (map['user_state'] < 3) goal.startDate = null;
+        if (map['user_state'] < 3) {
+          goal.startDate = null;
+          slave = null;
+        }
       } else {
         goal.title = null;
         goal.period = null;
@@ -278,9 +374,11 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
         goal.isPaid = false;
         goal.startDate = null;
         user.point = 0;
+        slave = null;
       }
 
       if (map != null && map['user_state'] == 3) {
+        slave = map['slave'];
         Map<dynamic, dynamic> map2 = map['goal'] as Map;
         if (map2['auth_image'] != null) goal.authImage = Map<String, String>.from(map2['auth_image']);
         if (map2['image_check'] != null) goal.imageCheck = Map<String, bool>.from(map2['image_check']);
@@ -307,7 +405,10 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
             goal.category = map2["category"];
             if(map['user_state'] >= 2) goal.isPaid = map2["is_paid"];
             else goal.isPaid = false;
-            if (map['user_state'] < 3) goal.startDate = null;
+            if (map['user_state'] < 3) {
+              goal.startDate = null;
+              slave = null;
+            }
           } else {
             goal.title = null;
             goal.period = null;
@@ -317,16 +418,18 @@ class _GoalManagementPageState extends State<GoalManagementPage> {
             goal.isPaid = false;
             goal.startDate = null;
             user.point = 0;
+            slave = null;
           }
 
           if (map != null && map['user_state'] == 3) {
+            slave = map['slave'];
             Map<dynamic, dynamic> map2 = map['goal'] as Map;
             if (map2['auth_image'] != null) goal.authImage = Map<String, String>.from(map2['auth_image']);
             if (map2['image_check'] != null) goal.imageCheck = Map<String, bool>.from(map2['image_check']);
             if (map2['feedback_message'] != null) goal.feedbackMessage = Map<String, String>.from(map2['feedback_message']);
             goal.startDate = DateFormat('yyyy-MM-dd').parse(map2['start_date']);
             goal.currentMoney = map2['current_money'];
-            return GoalCreatedPage();
+            if (slave != fp.getUser().uid) return GoalCreatedPage();
           }
 
           return Center(
