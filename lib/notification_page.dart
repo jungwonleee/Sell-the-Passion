@@ -91,7 +91,7 @@ class _NotificationPageState extends State<NotificationPage> {
           return ListView.builder(
             itemCount: map.length,
             itemBuilder: (context, index) {
-              Map<dynamic, dynamic> message = map[keyList[0]];
+              Map<dynamic, dynamic> message = map[keyList[index]];
               int type = int.parse(message['type']);
               String title = message['title'];
               String body = message['body'];

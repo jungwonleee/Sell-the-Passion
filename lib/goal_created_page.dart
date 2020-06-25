@@ -249,7 +249,7 @@ class GoalCreatedPageState extends State<GoalCreatedPage> {
                       )
                     ),
                     Container(
-                      child: goal.imageCheck["0$imgIdx"] == true ? Image.asset('assets/approved.png', width: 30, height: 30) : SizedBox(width: 0)
+                      child: goal.imageCheck["0$imgIdx"] == true ? Image.asset('assets/approved.png', width: 30, height: 30) : Image.asset('assets/declined.png', width: 30, height: 30)
                     )
                   ],
                 ) 

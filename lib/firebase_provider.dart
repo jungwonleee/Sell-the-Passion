@@ -54,7 +54,11 @@ class FirebaseProvider with ChangeNotifier {
         if (snapshot.value == null) {
           dbRef.update({
             'user_state': 0,
-            'user_token': userToken
+            'user_token': userToken,
+            'total_goal_num': 0,
+            'success_goal_num': 0,
+            'point': 0,
+            'not_refunded_money': 0,
           });
         }
       });

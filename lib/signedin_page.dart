@@ -57,25 +57,9 @@ class SignedInPageState extends State<SignedInPage> {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
-        /*final notification = message['data'];
-        setState(() {
-          dbRef.child("notification").push().set({
-            'type': notification['type'],
-            'title': notification['title'],
-            'body': notification['body']
-          });
-        });*/
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
-        /*final notification = message['data'];
-        setState(() {
-          dbRef.child("notification").push().set({
-            'type': notification['type'],
-            'title': notification['title'],
-            'body': notification['body']
-          });
-        });*/
       },
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");

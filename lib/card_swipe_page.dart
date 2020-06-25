@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tindercard/flutter_tindercard.dart';
 import 'package:provider/provider.dart';
 import 'package:sell_the_passion/goal_provider.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
 class CardSwipePage extends StatefulWidget {
   final String slave;
@@ -136,7 +137,7 @@ class _CardSwipePageState extends State<CardSwipePage> with TickerProviderStateM
         actions: <Widget>[
           key == 1 ? FlatButton(
             child: Text('완료', style: TextStyle(fontSize: 18, color: Colors.white)),
-            onPressed: () {
+            onPressed: () async {
               if (feedbackMessageController.text == "") {
                 showDialog(context: context, builder: (context) {
                   return AlertDialog(
@@ -167,6 +168,28 @@ class _CardSwipePageState extends State<CardSwipePage> with TickerProviderStateM
                 dbRef.update(
                   {"current_money": goal.currentMoney += 4200*approvedNum ~/ cardImages.length}
                 );
+
+              try {
+                final HttpsCallable notificate = CloudFunctions.instance.getHttpsCallable(functionName: 'notificate')
+                ..timeout = const Duration(seconds: 30);
+                await notificate.call(
+                  <String, dynamic> {
+                    "to": widget.slave,
+                    "type": "1",
+                    "title": "후원자가 평가를 완료하였습니다.",
+                    "body": "목표관리화면에서 평가내용을 확인해주세요.",
+                  }
+                );
+              } on CloudFunctionsException catch (e) {
+                print('caught firebase functions exception');
+                print('code: ${e.code}');
+                print('message: ${e.message}');
+                print('details: ${e.details}');
+              } catch (e) {
+                print('caught generic exception');
+                print(e);
+              }
+
                 Navigator.pop(context);
               }
             }

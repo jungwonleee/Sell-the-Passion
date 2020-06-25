@@ -30,4 +30,7 @@ class SlaveGoal with ChangeNotifier {
 
 class User with ChangeNotifier {
   int point = 0;
+  int totalGoalNum = 0;
+  int successGoalNum = 0;
+  int notRefundedMoney = 0;
 }
